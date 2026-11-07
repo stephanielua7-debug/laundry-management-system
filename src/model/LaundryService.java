@@ -1,8 +1,6 @@
 package model;
 
-import java.io.Serializable;
-
-public class LaundryService implements Serializable {
+public class LaundryService {
 
     private int id;
     private String name;
