@@ -6,8 +6,7 @@ public class ConsoleHelper {
 
     public static void printLine() {
 
-        System.out.println(
-                "==============================================");
+        System.out.println("==============================================");
     }
 
     public static void printHeader(String title) {
