@@ -23,7 +23,6 @@ public class ReportView {
                 "Outstanding Balance: PHP %.2f%n",
                 totalBalance);
 
-        System.out.println(
-                "=====================================");
+        System.out.println("=====================================");
     }
 }
