@@ -99,26 +99,20 @@ public class CustomerController {
             return;
         }
 
-        String name = InputValidator.getString(
-                scanner, "New Name: ");
+        String name = InputValidator.getString(scanner, "New Name: ");
 
-        String phone = InputValidator.getString(
-                scanner, "New Phone: ");
+        String phone = InputValidator.getString(scanner, "New Phone: ");
 
-        String address = InputValidator.getString(
-                scanner, "New Address: ");
+        String address = InputValidator.getString(scanner, "New Address: ");
 
-        service.updateCustomer(
-                id, name, phone, address);
+        service.updateCustomer(id, name, phone, address);
 
-        view.displayMessage(
-                "Customer successfully updated!");
+        view.displayMessage("Customer successfully updated!");
     }
 
     private void deleteCustomer() {
 
-        int id = InputValidator.getInt(
-                scanner, "Enter Customer ID: ");
+        int id = InputValidator.getInt(scanner, "Enter Customer ID: ");
 
         if (service.deleteCustomer(id)) {
 
