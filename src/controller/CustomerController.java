@@ -25,6 +25,8 @@ public class CustomerController {
 
         while (running) {
 
+            // Display Menu Header
+
             ConsoleHelper.printHeader("CUSTOMER MANAGEMENT");
 
             System.out.println("1. Add Customer");
@@ -33,6 +35,7 @@ public class CustomerController {
             System.out.println("4. Delete Customer");
             System.out.println("0. Back");
 
+            // Safely read menu choice from user
             int choice = InputValidator.getInt(scanner, "Enter choice: ");
 
             switch (choice) {
