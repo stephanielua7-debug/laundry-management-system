@@ -1,7 +1,6 @@
 package controller;
 
 import java.util.Scanner;
-import model.Payment;
 
 import service.PaymentService;
 import service.OrderService;
