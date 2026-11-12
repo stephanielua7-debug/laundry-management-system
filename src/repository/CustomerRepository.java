@@ -1,57 +1,22 @@
+
 package repository;
 
 import model.Customer;
-import java.util.ArrayList;
+import java.util.*;
 
 public class CustomerRepository {
 
-    private static ArrayList<Customer> customers = new ArrayList<>();
+    private Map<String, Customer> customers = new LinkedHashMap<>();
 
-    public void add(Customer customer) {
-        customers.add(customer);
+    public void save(Customer customer) {
+        customers.put(customer.getCustomerId(), customer);
     }
 
-    public ArrayList<Customer> getAll() {
-        return new ArrayList<>(customers);
+    public Customer findById(String customerId) {
+        return customers.get(customerId);
     }
 
-    public Customer findById(int id) {
-
-        for (Customer customer : customers) {
-
-            if (customer.getId() == id) {
-                return customer;
-            }
-        }
-
-        return null;
-    }
-
-    public boolean update(Customer updatedCustomer) {
-
-        Customer customer = findById(updatedCustomer.getId());
-
-        if (customer != null) {
-
-            customer.setName(updatedCustomer.getName());
-            customer.setPhone(updatedCustomer.getPhone());
-            customer.setAddress(updatedCustomer.getAddress());
-
-            return true;
-        }
-
-        return false;
-    }
-
-    public boolean delete(int id) {
-
-        Customer customer = findById(id);
-
-        if (customer != null) {
-            customers.remove(customer);
-            return true;
-        }
-
-        return false;
+    public Collection<Customer> findAll() {
+        return customers.values();
     }
 }
