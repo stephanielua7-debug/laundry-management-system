@@ -1,42 +1,34 @@
+
 package controller;
 
-import java.util.Scanner;
-import model.Customer;
 import service.CustomerService;
 import view.CustomerView;
-import util.InputValidator;
 import util.ConsoleHelper;
 
 public class CustomerController {
 
-    private Scanner scanner; // Shared scanner instance for user input
+    private CustomerService customerService;
+    private CustomerView customerView;
 
-    private CustomerService service = new CustomerService();
+    public CustomerController(
+            CustomerService customerService,
+            CustomerView customerView) {
 
-    private CustomerView view = new CustomerView();
-
-    public CustomerController(Scanner scanner) {
-        this.scanner = scanner;
+        this.customerService = customerService;
+        this.customerView = customerView;
     }
 
-    public void run() {
+    public void showMenu() {
 
-        boolean running = true;
+        while (true) {
 
-        while (running) {
-
-            ConsoleHelper.printHeader("CUSTOMER MANAGEMENT"); // Display Menu Header
-
+            System.out.println("\n========== CUSTOMER MANAGEMENT ==========");
             System.out.println("1. Add Customer");
             System.out.println("2. View Customers");
-            System.out.println("3. Update Customer");
-            System.out.println("4. Delete Customer");
-            System.out.println("0. Back");
+            System.out.println("0. Back to Main Menu");
 
-            // Safely read menu choice from user
-            int choice = InputValidator.getInt(scanner, "Enter choice: ");
+            int choice = ConsoleHelper.readInt("Enter choice: ");
 
-            // Route to the appropriate method based on user choice
             switch (choice) {
 
                 case 1:
@@ -44,85 +36,36 @@ public class CustomerController {
                     break;
 
                 case 2:
-                    viewCustomers();
-                    break;
-
-                case 3:
-                    updateCustomer();
-                    break;
-
-                case 4:
-                    deleteCustomer();
+                    customerView.displayCustomers(
+                            customerService.getAllCustomers());
+                    ConsoleHelper.pause();
                     break;
 
                 case 0:
-                    running = false;
-                    break;
+                    return;
 
                 default:
                     System.out.println("Invalid choice!");
-            }
-
-            if (running) {
-                ConsoleHelper.pause(scanner);
             }
         }
     }
 
     private void addCustomer() {
 
-        String name = InputValidator.getString(scanner, "Customer Name: ");
+        String name = ConsoleHelper.readString("Customer Name: ");
+        String phone = ConsoleHelper.readString("Phone Number: ");
 
-        String phone = InputValidator.getString(scanner, "Phone Number: ");
+        try {
 
-        String address = InputValidator.getString(scanner, "Address: ");
+            System.out.println("\nCustomer Added Successfully!");
 
-        service.addCustomer(name, phone, address);
+            System.out.println(
+                    customerService.addCustomer(name, phone));
 
-        view.displayMessage("Customer successfully added!");
-    }
-
-    private void viewCustomers() {
-
-        view.displayCustomers(
-                service.getAllCustomers());
-    }
-
-    private void updateCustomer() {
-
-        int id = InputValidator.getInt(
-                scanner, "Enter Customer ID: ");
-
-        Customer customer = service.getCustomerById(id);
-
-        if (customer == null) {
-
-            view.displayMessage("Customer not found!");
-            return;
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
         }
 
-        String name = InputValidator.getString(scanner, "New Name: ");
-
-        String phone = InputValidator.getString(scanner, "New Phone: ");
-
-        String address = InputValidator.getString(scanner, "New Address: ");
-
-        service.updateCustomer(id, name, phone, address);
-
-        view.displayMessage("Customer successfully updated!");
-    }
-
-    private void deleteCustomer() {
-
-        int id = InputValidator.getInt(scanner, "Enter Customer ID: ");
-
-        if (service.deleteCustomer(id)) {
-
-            view.displayMessage("Customer successfully deleted!");
-
-        } else {
-
-            view.displayMessage("Customer not found!");
-        }
+        ConsoleHelper.pause();
     }
 }
