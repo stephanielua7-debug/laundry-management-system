@@ -1,9 +1,9 @@
 package service;
 
-import model.Order;
+import model.Laundry Order;
 import model.LaundryService;
-import repository.OrderRepository;
-import repository.ServiceRepository;
+import repository.LaundryOrderRepository;
+import repository.LaundryServiceRepository;
 import java.util.ArrayList;
 import util.IdGenerator;
 import util.DateUtil;
@@ -11,9 +11,9 @@ import java.time.LocalDate;
 
 public class OrderService {
 
-    private OrderRepository orderRepository = new OrderRepository();
+    private LaundryOrderRepository orderRepository = new LaundryOrderRepository();
 
-    private ServiceRepository serviceRepository = new ServiceRepository();
+    private LaundryServiceRepository serviceRepository = new LaundryServiceRepository();
 
     public boolean createOrder(
             int customerId, int serviceId,
