@@ -1,43 +1,39 @@
+
 package service;
 
 import model.Customer;
 import repository.CustomerRepository;
-import java.util.ArrayList;
 import util.IdGenerator;
+import util.InputValidator;
+import java.util.Collection;
 
 public class CustomerService {
 
-    private CustomerRepository repository = new CustomerRepository();
+    private CustomerRepository repository;
 
-    public void addCustomer(
-            String name, String phone, String address) {
-
-        int id = IdGenerator.generateCustomerId();
-
-        Customer customer = new Customer(id, name, phone, address);
-
-        repository.add(customer);
+    public CustomerService(CustomerRepository repository) {
+        this.repository = repository;
     }
 
-    public ArrayList<Customer> getAllCustomers() {
-        return repository.getAll();
+    public Customer addCustomer(String name, String phone) {
+
+        name = InputValidator.validateRequired(name, "Name");
+        phone = InputValidator.validateRequired(phone, "Phone");
+
+        String id = IdGenerator.generateCustomerId();
+
+        Customer customer = new Customer(id, name, phone);
+
+        repository.save(customer);
+
+        return customer;
     }
 
-    public Customer getCustomerById(int id) {
+    public Customer findCustomer(String id) {
         return repository.findById(id);
     }
 
-    public boolean updateCustomer(
-            int id, String name,
-            String phone, String address) {
-
-        Customer customer = new Customer(
-                id, name, phone, address);
-
-        return repository.update(customer);
-    }
-
-    public boolean deleteCustomer(int id) {
-        return repository.delete(id);
+    public Collection<Customer> getAllCustomers() {
+        return repository.findAll();
     }
 }

@@ -20,8 +20,7 @@ public class InputValidator {
 
             } catch (NumberFormatException e) {
 
-                System.out.println(
-                        "Invalid input! Enter a whole number.");
+                System.out.println("Invalid input! Enter a whole number.");
             }
         }
     }
