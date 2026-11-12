@@ -1,23 +1,19 @@
+
 package model;
 
 public class Customer {
-
-    private int id;
+    private String customerId;
     private String name;
     private String phone;
-    private String address;
 
-    public Customer(int id, String name,
-            String phone, String address) {
-
-        this.id = id;
+    public Customer(String customerId, String name, String phone) {
+        this.customerId = customerId;
         this.name = name;
         this.phone = phone;
-        this.address = address;
     }
 
-    public int getId() {
-        return id;
+    public String getCustomerId() {
+        return customerId;
     }
 
     public String getName() {
@@ -28,10 +24,6 @@ public class Customer {
         return phone;
     }
 
-    public String getAddress() {
-        return address;
-    }
-
     public void setName(String name) {
         this.name = name;
     }
@@ -40,15 +32,10 @@ public class Customer {
         this.phone = phone;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
     @Override
     public String toString() {
-        return "ID: " + id +
-                " | Name: " + name +
-                " | Phone: " + phone +
-                " | Address: " + address;
+        return "Customer ID: " + customerId
+                + " | Name: " + name
+                + " | Phone: " + phone;
     }
 }
