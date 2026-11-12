@@ -9,7 +9,7 @@ import util.ConsoleHelper;
 
 public class CustomerController {
 
-    private Scanner scanner;
+    private Scanner scanner; // Shared scanner instance for user input
 
     private CustomerService service = new CustomerService();
 
@@ -25,9 +25,7 @@ public class CustomerController {
 
         while (running) {
 
-            // Display Menu Header
-
-            ConsoleHelper.printHeader("CUSTOMER MANAGEMENT");
+            ConsoleHelper.printHeader("CUSTOMER MANAGEMENT"); // Display Menu Header
 
             System.out.println("1. Add Customer");
             System.out.println("2. View Customers");
@@ -38,6 +36,7 @@ public class CustomerController {
             // Safely read menu choice from user
             int choice = InputValidator.getInt(scanner, "Enter choice: ");
 
+            // Route to the appropriate method based on user choice
             switch (choice) {
 
                 case 1:
@@ -119,8 +118,7 @@ public class CustomerController {
 
         if (service.deleteCustomer(id)) {
 
-            view.displayMessage(
-                    "Customer successfully deleted!");
+            view.displayMessage("Customer successfully deleted!");
 
         } else {
 

@@ -1,3 +1,4 @@
+
 package controller;
 
 import java.util.Scanner;
@@ -9,15 +10,14 @@ import util.InputValidator;
 import util.ConsoleHelper;
 
 import view.PaymentView;
+import model.Order;
 
 public class PaymentController {
 
     private Scanner scanner;
 
     private PaymentService paymentService = new PaymentService();
-
     private OrderService orderService = new OrderService();
-
     private PaymentView view = new PaymentView();
 
     public PaymentController(Scanner scanner) {
@@ -30,8 +30,7 @@ public class PaymentController {
 
         while (running) {
 
-            ConsoleHelper.printHeader(
-                    "PAYMENT MANAGEMENT");
+            ConsoleHelper.printHeader("PAYMENT MANAGEMENT");
 
             System.out.println("1. Add Payment");
             System.out.println("2. View Payments");
@@ -69,12 +68,12 @@ public class PaymentController {
         }
     }
 
+    // ADD PAYMENT
     private void addPayment() {
 
-        System.out.println("\nAVAILABLE ORDERS:");
+        System.out.println("\n========== AVAILABLE ORDERS ==========");
 
-        for (model.Order order : orderService.getAllOrders()) {
-
+        for (Order order : orderService.getAllOrders()) {
             System.out.println(order);
         }
 
@@ -84,12 +83,15 @@ public class PaymentController {
         double amount = InputValidator.getPositiveDouble(
                 scanner, "Payment Amount: PHP ");
 
+        System.out.println("\n========== PAYMENT METHODS ==========");
         System.out.println("1. CASH");
-        System.out.println("2. GCASH");
-        System.out.println("3. BANK TRANSFER");
+        System.out.println("2. E-WALLET");
+        System.out.println("3. DEBIT CARD");
+        System.out.println("4. CREDIT CARD");
+        System.out.println("5. BANK TRANSFER");
 
         int choice = InputValidator.getInt(
-                scanner, "Payment Method: ");
+                scanner, "Select Payment Method: ");
 
         String method;
 
@@ -100,38 +102,53 @@ public class PaymentController {
                 break;
 
             case 2:
-                method = "GCASH";
+                method = "E-WALLET";
                 break;
 
             case 3:
+                method = "DEBIT CARD";
+                break;
+
+            case 4:
+                method = "CREDIT CARD";
+                break;
+
+            case 5:
                 method = "BANK TRANSFER";
                 break;
 
             default:
-                System.out.println("Invalid method!");
+                System.out.println("Invalid payment method!");
                 return;
         }
 
-        if (paymentService.addPayment(
-                orderId, amount, method)) {
+        System.out.println("\n========== PAYMENT CONFIRMATION ==========");
+        System.out.println("Order ID: " + orderId);
+        System.out.println("Payment Amount: PHP " + amount);
+        System.out.println("Payment Method: " + method);
 
-            System.out.println(
-                    "Payment successfully recorded!");
+        if (paymentService.addPayment(orderId, amount, method)) {
+
+            System.out.println("\nPayment successfully recorded!");
 
         } else {
 
             System.out.println(
-                    "Payment failed! Check the order ID "
+                    "\nPayment failed! Check the order ID "
                             + "and remaining balance.");
         }
     }
 
+    // VIEW PAYMENTS
     private void viewPayments() {
+
+        System.out.println("\n========== PAYMENT RECORDS ==========");
 
         view.displayPayments(
                 paymentService.getAllPayments());
     }
 
+    // DELETE PAYMENT
     private void deletePayment() {
 
         int id = InputValidator.getInt(
@@ -139,11 +156,11 @@ public class PaymentController {
 
         if (paymentService.deletePayment(id)) {
 
-            System.out.println("Payment deleted!");
+            System.out.println("\nPayment deleted successfully!");
 
         } else {
 
-            System.out.println("Payment not found!");
+            System.out.println("\nPayment not found!");
         }
     }
 }
