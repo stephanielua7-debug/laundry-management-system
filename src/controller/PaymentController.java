@@ -1,166 +1,107 @@
 
 package controller;
 
-import java.util.Scanner;
-
 import service.PaymentService;
-import service.OrderService;
-
-import util.InputValidator;
-import util.ConsoleHelper;
-
+import repository.LaundryOrderRepository;
 import view.PaymentView;
-import model.Order;
+import view.LaundryProcessingView;
+import util.ConsoleHelper;
 
 public class PaymentController {
 
-    private Scanner scanner;
+    private PaymentService paymentService;
+    private LaundryOrderRepository orderRepository;
+    private PaymentView paymentView;
+    private LaundryProcessingView processingView;
 
-    private PaymentService paymentService = new PaymentService();
-    private OrderService orderService = new OrderService();
-    private PaymentView view = new PaymentView();
+    public PaymentController(
+            PaymentService paymentService,
+            LaundryOrderRepository orderRepository,
+            PaymentView paymentView) {
 
-    public PaymentController(Scanner scanner) {
-        this.scanner = scanner;
+        this.paymentService = paymentService;
+        this.orderRepository = orderRepository;
+        this.paymentView = paymentView;
+        this.processingView = new LaundryProcessingView();
     }
 
-    public void run() {
+    public void showMenu() {
 
-        boolean running = true;
+        while (true) {
 
-        while (running) {
+            System.out.println("\n========== PAYMENT MANAGEMENT ==========");
+            System.out.println("1. Pay Laundry Order");
+            System.out.println("2. View Payment Records");
+            System.out.println("0. Back to Main Menu");
 
-            ConsoleHelper.printHeader("PAYMENT MANAGEMENT");
-
-            System.out.println("1. Add Payment");
-            System.out.println("2. View Payments");
-            System.out.println("3. Delete Payment");
-            System.out.println("0. Back");
-
-            int choice = InputValidator.getInt(
-                    scanner, "Enter choice: ");
+            int choice = ConsoleHelper.readInt("Enter choice: ");
 
             switch (choice) {
 
                 case 1:
-                    addPayment();
+                    payOrder();
                     break;
 
                 case 2:
-                    viewPayments();
-                    break;
-
-                case 3:
-                    deletePayment();
+                    paymentView.displayPayments(
+                            paymentService.getAllPayments());
+                    ConsoleHelper.pause();
                     break;
 
                 case 0:
-                    running = false;
-                    break;
+                    return;
 
                 default:
                     System.out.println("Invalid choice!");
             }
-
-            if (running) {
-                ConsoleHelper.pause(scanner);
-            }
         }
     }
 
-    // ADD PAYMENT
-    private void addPayment() {
+    private void payOrder() {
 
-        System.out.println("\n========== AVAILABLE ORDERS ==========");
+        processingView.displayOrders(
+                orderRepository.findAll());
 
-        for (Order order : orderService.getAllOrders()) {
-            System.out.println(order);
-        }
+        String orderId = ConsoleHelper.readString("Enter Order ID: ");
 
-        int orderId = InputValidator.getInt(
-                scanner, "Enter Order ID: ");
+        System.out.println("\nPayment Methods");
+        System.out.println("1. Cash");
+        System.out.println("2. Bank Transfer");
+        System.out.println("3. Other");
 
-        double amount = InputValidator.getPositiveDouble(
-                scanner, "Payment Amount: PHP ");
-
-        System.out.println("\n========== PAYMENT METHODS ==========");
-        System.out.println("1. CASH");
-        System.out.println("2. E-WALLET");
-        System.out.println("3. DEBIT CARD");
-        System.out.println("4. CREDIT CARD");
-        System.out.println("5. BANK TRANSFER");
-
-        int choice = InputValidator.getInt(
-                scanner, "Select Payment Method: ");
+        int choice = ConsoleHelper.readInt("Select Payment Method: ");
 
         String method;
 
         switch (choice) {
-
             case 1:
-                method = "CASH";
+                method = "Cash";
                 break;
 
             case 2:
-                method = "E-WALLET";
+                method = "Bank Transfer";
                 break;
 
             case 3:
-                method = "DEBIT CARD";
-                break;
-
-            case 4:
-                method = "CREDIT CARD";
-                break;
-
-            case 5:
-                method = "BANK TRANSFER";
+                method = "Other";
                 break;
 
             default:
                 System.out.println("Invalid payment method!");
+                ConsoleHelper.pause();
                 return;
         }
 
-        System.out.println("\n========== PAYMENT CONFIRMATION ==========");
-        System.out.println("Order ID: " + orderId);
-        System.out.println("Payment Amount: PHP " + amount);
-        System.out.println("Payment Method: " + method);
+        try {
 
-        if (paymentService.addPayment(orderId, amount, method)) {
+            paymentView.displaySuccess(
+                    paymentService.payLaundry(orderId, method));
 
-            System.out.println("\nPayment successfully recorded!");
+        } catch (Exception e) {
 
-        } else {
-
-            System.out.println(
-                    "\nPayment failed! Check the order ID "
-                            + "and remaining balance.");
+            System.out.println("Error: " + e.getMessage());
         }
-    }
 
-    // VIEW PAYMENTS
-    private void viewPayments() {
-
-        System.out.println("\n========== PAYMENT RECORDS ==========");
-
-        view.displayPayments(
-                paymentService.getAllPayments());
-    }
-
-    // DELETE PAYMENT
-    private void deletePayment() {
-
-        int id = InputValidator.getInt(
-                scanner, "Enter Payment ID: ");
-
-        if (paymentService.deletePayment(id)) {
-
-            System.out.println("\nPayment deleted successfully!");
-
-        } else {
-
-            System.out.println("\nPayment not found!");
-        }
+        ConsoleHelper.pause();
     }
 }
