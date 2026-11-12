@@ -1,31 +1,29 @@
+
 package model;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
-public class Payment {
-
-    private int id;
-    private int orderId;
+public class LaundryPayment {
+    private String paymentId;
+    private String orderId;
     private double amount;
-    private String method;
-    private LocalDate paymentDate;
+    private String paymentMethod;
+    private LocalDateTime paymentDate;
 
-    public Payment(int id, int orderId,
-            double amount, String method,
-            LocalDate paymentDate) {
-
-        this.id = id;
+    public LaundryPayment(String paymentId, String orderId,
+            double amount, String paymentMethod) {
+        this.paymentId = paymentId;
         this.orderId = orderId;
         this.amount = amount;
-        this.method = method;
-        this.paymentDate = paymentDate;
+        this.paymentMethod = paymentMethod;
+        this.paymentDate = LocalDateTime.now();
     }
 
-    public int getId() {
-        return id;
+    public String getPaymentId() {
+        return paymentId;
     }
 
-    public int getOrderId() {
+    public String getOrderId() {
         return orderId;
     }
 
@@ -33,20 +31,19 @@ public class Payment {
         return amount;
     }
 
-    public String getMethod() {
-        return method;
+    public String getPaymentMethod() {
+        return paymentMethod;
     }
 
-    public LocalDate getPaymentDate() {
+    public LocalDateTime getPaymentDate() {
         return paymentDate;
     }
 
     @Override
     public String toString() {
-        return "Payment ID: " + id +
-                " | Order ID: " + orderId +
-                " | Amount: PHP " + amount +
-                " | Method: " + method +
-                " | Date: " + paymentDate;
+        return paymentId + " | Order: " + orderId
+                + " | PHP " + String.format("%.2f", amount)
+                + " | " + paymentMethod
+                + " | " + paymentDate;
     }
 }
