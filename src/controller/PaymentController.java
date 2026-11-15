@@ -9,13 +9,13 @@ import util.ConsoleHelper;
 
 public class PaymentController {
 
-    private PaymentService paymentService;
+    private LaundryPaymentService paymentService;
     private LaundryOrderRepository orderRepository;
     private PaymentView paymentView;
     private LaundryProcessingView processingView;
 
     public PaymentController(
-            PaymentService paymentService,
+            LaundryPaymentService paymentService,
             LaundryOrderRepository orderRepository,
             PaymentView paymentView) {
 
