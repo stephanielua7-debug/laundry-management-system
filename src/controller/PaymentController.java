@@ -1,7 +1,7 @@
 
 package controller;
 
-import service.PaymentService;
+import service.LaundryPaymentService;
 import repository.LaundryOrderRepository;
 import view.PaymentView;
 import view.LaundryProcessingView;
