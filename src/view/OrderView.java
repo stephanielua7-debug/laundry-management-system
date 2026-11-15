@@ -1,11 +1,11 @@
 package view;
 
-import model.Order;
+import model.LaundryOrder;
 import java.util.ArrayList;
 
 public class OrderView {
 
-    public void displayOrders(ArrayList<Order> orders) {
+    public void displayOrders(ArrayList<LaundryOrder> orders) {
 
         System.out.println("\nORDER LIST");
         System.out.println("--------------------------------");
@@ -15,7 +15,7 @@ public class OrderView {
             return;
         }
 
-        for (Order order : orders) {
+        for (LaundryOrder order : orders) {
             System.out.println(order);
         }
     }
