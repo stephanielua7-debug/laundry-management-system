@@ -88,12 +88,7 @@ public class LaundryReceivingController {
                 items.add(new LaundryItem(itemName, quantity));
             }
 
-            LaundryOrder order = receivingService.receiveLaundry(
-                    customerId,
-                    serviceId,
-                    weight,
-                    dueDate,
-                    items);
+            LaundryOrder order = receivingService.receiveLaundry(customerId, serviceId, weight, dueDate, items);
 
             receivingView.displayOrder(order);
 

@@ -1,33 +1,49 @@
+
 package util;
 
 import java.util.Scanner;
 
 public class ConsoleHelper {
 
-    public static void printLine() {
+    private static Scanner scanner = new Scanner(System.in);
 
-        System.out.println("==============================================");
+    public static String readString(String message) {
+        System.out.print(message);
+        return scanner.nextLine().trim();
     }
 
-    public static void printHeader(String title) {
+    public static int readInt(String message) {
 
-        printLine();
+        while (true) {
+            try {
+                System.out.print(message);
+                return Integer.parseInt(scanner.nextLine());
 
-        System.out.println("       " + title);
-
-        printLine();
+            } catch (NumberFormatException e) {
+                System.out.println("Please enter a valid number!");
+            }
+        }
     }
 
-    public static void pause(Scanner scanner) {
+    public static double readDouble(String message) {
 
-        System.out.println();
-        System.out.print("Press ENTER to continue...");
+        while (true) {
+            try {
+                System.out.print(message);
+                return Double.parseDouble(scanner.nextLine());
 
+            } catch (NumberFormatException e) {
+                System.out.println("Please enter a valid amount!");
+            }
+        }
+    }
+
+    public static void pause() {
+        System.out.println("\nPress ENTER to continue...");
         scanner.nextLine();
     }
 
-    public static void printMessage(String message) {
-
-        System.out.println("\n" + message);
+    public static void displayLine() {
+        System.out.println("----------------------------------------------");
     }
 }
