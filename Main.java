@@ -1,4 +1,3 @@
-
 import controller.*;
 
 import model.LaundryService;
@@ -11,175 +10,175 @@ import view.*;
 
 public class Main {
 
-    public static void main(String[] args) {
+        public static void main(String[] args) {
 
-        // =================================
-        // REPOSITORIES
-        // =================================
+                // =================================
+                // REPOSITORIES
+                // =================================
 
-        CustomerRepository customerRepository = new CustomerRepository();
+                CustomerRepository customerRepository = new CustomerRepository();
 
-        LaundryOrderRepository orderRepository = new LaundryOrderRepository();
+                LaundryOrderRepository orderRepository = new LaundryOrderRepository();
 
-        LaundryServiceRepository serviceRepository = new LaundryServiceRepository();
+                LaundryServiceRepository serviceRepository = new LaundryServiceRepository();
 
-        LaundryPaymentRepository paymentRepository = new LaundryPaymentRepository();
+                LaundryPaymentRepository paymentRepository = new LaundryPaymentRepository();
 
-        // =================================
-        // SERVICES
-        // =================================
+                // =================================
+                // SERVICES
+                // =================================
 
-        CustomerService customerService = new CustomerService(customerRepository);
+                CustomerService customerService = new CustomerService(customerRepository);
 
-        LaundryServiceManager laundryServiceManager = new LaundryServiceManager(serviceRepository);
+                LaundryServiceManager laundryServiceManager = new LaundryServiceManager(serviceRepository);
 
-        LaundryReceivingService receivingService = new LaundryReceivingService(
-                orderRepository,
-                customerRepository,
-                serviceRepository);
+                LaundryReceivingService receivingService = new LaundryReceivingService(
+                                orderRepository,
+                                customerRepository,
+                                serviceRepository);
 
-        LaundryProcessingService processingService = new LaundryProcessingService(orderRepository);
+                LaundryProcessingService processingService = new LaundryProcessingService(orderRepository);
 
-        LaundryReleasingService releasingService = new LaundryReleasingService(orderRepository);
+                LaundryReleasingService releasingService = new LaundryReleasingService(orderRepository);
 
-        PaymentService paymentService = new PaymentService(
-                orderRepository,
-                paymentRepository);
+                PaymentService paymentService = new PaymentService(
+                                orderRepository,
+                                paymentRepository);
 
-        LaundryReportService reportService = new LaundryReportService(
-                orderRepository,
-                customerRepository,
-                serviceRepository);
+                LaundryReportService reportService = new LaundryReportService(
+                                orderRepository,
+                                customerRepository,
+                                serviceRepository);
 
-        // =================================
-        // VIEWS
-        // =================================
+                // =================================
+                // VIEWS
+                // =================================
 
-        MainMenu mainMenu = new MainMenu();
+                MainMenu mainMenu = new MainMenu();
 
-        CustomerView customerView = new CustomerView();
+                CustomerView customerView = new CustomerView();
 
-        LaundryReceivingView receivingView = new LaundryReceivingView();
+                LaundryReceivingView receivingView = new LaundryReceivingView();
 
-        LaundryServiceView serviceView = new LaundryServiceView();
+                LaundryServiceView serviceView = new LaundryServiceView();
 
-        LaundryProcessingView processingView = new LaundryProcessingView();
+                LaundryProcessingView processingView = new LaundryProcessingView();
 
-        LaundryReleasingView releasingView = new LaundryReleasingView();
+                LaundryReleasingView releasingView = new LaundryReleasingView();
 
-        PaymentView paymentView = new PaymentView();
+                PaymentView paymentView = new PaymentView();
 
-        LaundryReportView reportView = new LaundryReportView();
+                LaundryReportView reportView = new LaundryReportView();
 
-        // =================================
-        // CONTROLLERS
-        // =================================
+                // =================================
+                // CONTROLLERS
+                // =================================
 
-        CustomerController customerController = new CustomerController(
-                customerService,
-                customerView);
+                CustomerController customerController = new CustomerController(
+                                customerService,
+                                customerView);
 
-        LaundryReceivingController receivingController = new LaundryReceivingController(
-                receivingService,
-                customerService,
-                laundryServiceManager,
-                receivingView);
+                LaundryReceivingController receivingController = new LaundryReceivingController(
+                                receivingService,
+                                customerService,
+                                laundryServiceManager,
+                                receivingView);
 
-        LaundryServiceController serviceController = new LaundryServiceController(
-                laundryServiceManager,
-                serviceView);
+                LaundryServiceController serviceController = new LaundryServiceController(
+                                laundryServiceManager,
+                                serviceView);
 
-        LaundryProcessingController processingController = new LaundryProcessingController(
-                processingService,
-                orderRepository,
-                processingView);
+                LaundryProcessingController processingController = new LaundryProcessingController(
+                                processingService,
+                                orderRepository,
+                                processingView);
 
-        LaundryReleasingController releasingController = new LaundryReleasingController(
-                releasingService,
-                orderRepository,
-                releasingView);
+                LaundryReleasingController releasingController = new LaundryReleasingController(
+                                releasingService,
+                                orderRepository,
+                                releasingView);
 
-        PaymentController paymentController = new PaymentController(
-                paymentService,
-                orderRepository,
-                paymentView);
+                PaymentController paymentController = new PaymentController(
+                                paymentService,
+                                orderRepository,
+                                paymentView);
 
-        LaundryReportController reportController = new LaundryReportController(
-                reportService,
-                reportView);
+                LaundryReportController reportController = new LaundryReportController(
+                                reportService,
+                                reportView);
 
-        // =================================
-        // DEFAULT LAUNDRY SERVICES
-        // =================================
+                // =================================
+                // DEFAULT LAUNDRY SERVICES
+                // =================================
 
-        laundryServiceManager.addService(
-                "Wash and Dry",
-                "Washing and drying only",
-                35.00);
+                laundryServiceManager.addService(
+                                "Wash and Dry",
+                                "Washing and drying only",
+                                35.00);
 
-        laundryServiceManager.addService(
-                "Wash, Dry and Fold",
-                "Complete laundry service",
-                45.00);
+                laundryServiceManager.addService(
+                                "Wash, Dry and Fold",
+                                "Complete laundry service",
+                                45.00);
 
-        laundryServiceManager.addService(
-                "Ironing",
-                "Ironing service",
-                25.00);
+                laundryServiceManager.addService(
+                                "Ironing",
+                                "Ironing service",
+                                25.00);
 
-        // =================================
-        // MAIN PROGRAM
-        // =================================
+                // =================================
+                // MAIN PROGRAM
+                // =================================
 
-        boolean running = true;
+                boolean running = true;
 
-        while (running) {
+                while (running) {
 
-            int choice = mainMenu.displayMenu();
+                        int choice = mainMenu.displayMenu();
 
-            switch (choice) {
+                        switch (choice) {
 
-                case 1:
-                    customerController.showMenu();
-                    break;
+                                case 1:
+                                        customerController.showMenu();
+                                        break;
 
-                case 2:
-                    receivingController.receiveLaundry();
-                    break;
+                                case 2:
+                                        receivingController.receiveLaundry();
+                                        break;
 
-                case 3:
-                    serviceController.showMenu();
-                    break;
+                                case 3:
+                                        serviceController.showMenu();
+                                        break;
 
-                case 4:
-                    processingController.showMenu();
-                    break;
+                                case 4:
+                                        processingController.showMenu();
+                                        break;
 
-                case 5:
-                    releasingController.releaseLaundry();
-                    break;
+                                case 5:
+                                        releasingController.releaseLaundry();
+                                        break;
 
-                case 6:
-                    reportController.displayReport();
-                    break;
+                                case 6:
+                                        reportController.displayReport();
+                                        break;
 
-                case 7:
-                    paymentController.showMenu();
-                    break;
+                                case 7:
+                                        paymentController.showMenu();
+                                        break;
 
-                case 0:
+                                case 0:
 
-                    System.out.println("\n==================================");
-                    System.out.println(" THANK YOU FOR USING OUR SYSTEM!");
-                    System.out.println("==================================");
+                                        System.out.println("\n==================================");
+                                        System.out.println(" THANK YOU FOR USING OUR SYSTEM!");
+                                        System.out.println("==================================");
 
-                    running = false;
-                    break;
+                                        running = false;
+                                        break;
 
-                default:
+                                default:
 
-                    System.out.println("\nInvalid choice!");
-            }
+                                        System.out.println("\nInvalid choice!");
+                        }
+                }
         }
-    }
 }
