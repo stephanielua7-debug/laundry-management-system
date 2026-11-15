@@ -1,14 +1,23 @@
+
 package util;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 
 public class DateUtil {
 
-    private static final DateTimeFormatter FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    public static LocalDate parseDate(String date) {
 
-    public static String getCurrentDate() {
+        try {
+            return LocalDate.parse(date);
 
-        return LocalDate.now().format(FORMAT);
+        } catch (DateTimeParseException e) {
+            throw new IllegalArgumentException(
+                    "Invalid date! Use YYYY-MM-DD format.");
+        }
+    }
+
+    public static LocalDate getCurrentDate() {
+        return LocalDate.now();
     }
 }
