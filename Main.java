@@ -1,3 +1,4 @@
+
 import controller.*;
 
 import model.LaundryService;
@@ -32,10 +33,8 @@ public class Main {
 
                 LaundryServiceManager laundryServiceManager = new LaundryServiceManager(serviceRepository);
 
-                LaundryReceivingService receivingService = new LaundryReceivingService(
-                                orderRepository,
-                                customerRepository,
-                                serviceRepository);
+                LaundryReceivingService receivingService = new LaundryReceivingService(orderRepository,
+                                customerRepository, serviceRepository);
 
                 LaundryProcessingService processingService = new LaundryProcessingService(orderRepository);
 
