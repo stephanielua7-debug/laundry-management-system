@@ -1,30 +1,26 @@
+
 package util;
 
 public class IdGenerator {
 
-    private static int customerId = 1;
-    private static int orderId = 1;
-    private static int serviceId = 1;
-    private static int paymentId = 1;
-    private static int inventoryId = 1;
+    private static int customerCounter = 1;
+    private static int orderCounter = 1;
+    private static int serviceCounter = 1;
+    private static int paymentCounter = 1;
 
-    public static int generateCustomerId() {
-        return customerId++;
+    public static String generateCustomerId() {
+        return String.format("CUS%04d", customerCounter++);
     }
 
-    public static int generateOrderId() {
-        return orderId++;
+    public static String generateOrderId() {
+        return String.format("LND%04d", orderCounter++);
     }
 
-    public static int generateServiceId() {
-        return serviceId++;
+    public static String generateServiceId() {
+        return String.format("SRV%03d", serviceCounter++);
     }
 
-    public static int generatePaymentId() {
-        return paymentId++;
-    }
-
-    public static int generateInventoryId() {
-        return inventoryId++;
+    public static String generatePaymentId() {
+        return String.format("PAY%04d", paymentCounter++);
     }
 }
