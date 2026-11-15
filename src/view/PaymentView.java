@@ -1,12 +1,12 @@
 package view;
 
-import model.Payment;
+import model.LaundryPayment;
 import java.util.ArrayList;
 
 public class PaymentView {
 
     public void displayPayments(
-            ArrayList<Payment> payments) {
+            ArrayList<LaundryPayment> payments) {
 
         System.out.println("\nPAYMENT LIST");
         System.out.println("--------------------------------");
@@ -16,7 +16,7 @@ public class PaymentView {
             return;
         }
 
-        for (Payment payment : payments) {
+        for (LaundryPayment payment : payments) {
             System.out.println(payment);
         }
     }
