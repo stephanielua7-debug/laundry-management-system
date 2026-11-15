@@ -24,7 +24,11 @@ public class LaundryReceivingService {
         this.serviceRepository = serviceRepository;
     }
 
-    public LaundryOrder receiveLaundry(String customerId, String serviceId, double weight, LocalDate dueDate,
+    public LaundryOrder receiveLaundry(
+            String customerId,
+            String serviceId,
+            double weight,
+            LocalDate dueDate,
             List<LaundryItem> items) {
 
         if (customerRepository.findById(customerId) == null) {
@@ -49,8 +53,14 @@ public class LaundryReceivingService {
 
         double totalAmount = weight * service.getPricePerKg();
 
-        LaundryReceiving order = new LaundryReceiving(
-                IdGenerator.generateOrderId(), customerId, serviceId, weight, totalAmount, dueDate, items);
+        LaundryOrder order = new LaundryOrder(
+                IdGenerator.generateOrderId(),
+                customerId,
+                serviceId,
+                weight,
+                totalAmount,
+                dueDate,
+                items);
 
         orderRepository.save(order);
 
