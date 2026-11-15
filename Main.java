@@ -1,103 +1,185 @@
-import java.util.Scanner;
 
-import controller.CustomerController;
-import controller.OrderController;
-import controller.PaymentController;
-import controller.InventoryController;
-import controller.ReportController;
+import controller.*;
 
-import view.MainMenu;
-import util.ConsoleHelper;
+import model.LaundryService;
+
+import repository.*;
+
+import service.*;
+
+import view.*;
 
 public class Main {
 
     public static void main(String[] args) {
 
-        Scanner scanner = new Scanner(System.in);
+        // =================================
+        // REPOSITORIES
+        // =================================
 
-        MainMenu menu = new MainMenu();
+        CustomerRepository customerRepository = new CustomerRepository();
+
+        LaundryOrderRepository orderRepository = new LaundryOrderRepository();
+
+        LaundryServiceRepository serviceRepository = new LaundryServiceRepository();
+
+        LaundryPaymentRepository paymentRepository = new LaundryPaymentRepository();
+
+        // =================================
+        // SERVICES
+        // =================================
+
+        CustomerService customerService = new CustomerService(customerRepository);
+
+        LaundryServiceManager laundryServiceManager = new LaundryServiceManager(serviceRepository);
+
+        LaundryReceivingService receivingService = new LaundryReceivingService(
+                orderRepository,
+                customerRepository,
+                serviceRepository);
+
+        LaundryProcessingService processingService = new LaundryProcessingService(orderRepository);
+
+        LaundryReleasingService releasingService = new LaundryReleasingService(orderRepository);
+
+        PaymentService paymentService = new PaymentService(
+                orderRepository,
+                paymentRepository);
+
+        LaundryReportService reportService = new LaundryReportService(
+                orderRepository,
+                customerRepository,
+                serviceRepository);
+
+        // =================================
+        // VIEWS
+        // =================================
+
+        MainMenu mainMenu = new MainMenu();
+
+        CustomerView customerView = new CustomerView();
+
+        LaundryReceivingView receivingView = new LaundryReceivingView();
+
+        LaundryServiceView serviceView = new LaundryServiceView();
+
+        LaundryProcessingView processingView = new LaundryProcessingView();
+
+        LaundryReleasingView releasingView = new LaundryReleasingView();
+
+        PaymentView paymentView = new PaymentView();
+
+        LaundryReportView reportView = new LaundryReportView();
+
+        // =================================
+        // CONTROLLERS
+        // =================================
+
+        CustomerController customerController = new CustomerController(
+                customerService,
+                customerView);
+
+        LaundryReceivingController receivingController = new LaundryReceivingController(
+                receivingService,
+                customerService,
+                laundryServiceManager,
+                receivingView);
+
+        LaundryServiceController serviceController = new LaundryServiceController(
+                laundryServiceManager,
+                serviceView);
+
+        LaundryProcessingController processingController = new LaundryProcessingController(
+                processingService,
+                orderRepository,
+                processingView);
+
+        LaundryReleasingController releasingController = new LaundryReleasingController(
+                releasingService,
+                orderRepository,
+                releasingView);
+
+        PaymentController paymentController = new PaymentController(
+                paymentService,
+                orderRepository,
+                paymentView);
+
+        LaundryReportController reportController = new LaundryReportController(
+                reportService,
+                reportView);
+
+        // =================================
+        // DEFAULT LAUNDRY SERVICES
+        // =================================
+
+        laundryServiceManager.addService(
+                "Wash and Dry",
+                "Washing and drying only",
+                35.00);
+
+        laundryServiceManager.addService(
+                "Wash, Dry and Fold",
+                "Complete laundry service",
+                45.00);
+
+        laundryServiceManager.addService(
+                "Ironing",
+                "Ironing service",
+                25.00);
+
+        // =================================
+        // MAIN PROGRAM
+        // =================================
 
         boolean running = true;
 
         while (running) {
 
-            menu.display();
-
-            int choice = menu.getChoice(scanner);
+            int choice = mainMenu.displayMenu();
 
             switch (choice) {
 
                 case 1:
-
-                    CustomerController customerController = new CustomerController(scanner);
-
-                    customerController.run();
-
+                    customerController.showMenu();
                     break;
 
                 case 2:
-
-                    OrderController serviceController = new OrderController(scanner);
-
-                    serviceController.manageServices();
-
+                    receivingController.receiveLaundry();
                     break;
 
                 case 3:
-
-                    OrderController orderController = new OrderController(scanner);
-
-                    orderController.run();
-
+                    serviceController.showMenu();
                     break;
 
                 case 4:
-
-                    PaymentController paymentController = new PaymentController(scanner);
-
-                    paymentController.run();
-
+                    processingController.showMenu();
                     break;
 
                 case 5:
-
-                    InventoryController inventoryController = new InventoryController(scanner);
-
-                    inventoryController.run();
-
+                    releasingController.releaseLaundry();
                     break;
 
                 case 6:
+                    reportController.displayReport();
+                    break;
 
-                    ReportController reportController = new ReportController();
-
-                    reportController.run();
-
-                    ConsoleHelper.pause(scanner);
-
+                case 7:
+                    paymentController.showMenu();
                     break;
 
                 case 0:
 
+                    System.out.println("\n==================================");
+                    System.out.println(" THANK YOU FOR USING OUR SYSTEM!");
+                    System.out.println("==================================");
+
                     running = false;
-
-                    System.out.println(
-                            "\nThank you for using "
-                                    + "Laundry Management System!");
-
                     break;
 
                 default:
 
-                    System.out.println(
-                            "Invalid choice! Please try again.");
-
-                    ConsoleHelper.pause(scanner);
-
-                    break;
+                    System.out.println("\nInvalid choice!");
             }
         }
-
-        scanner.close();
     }
 }
