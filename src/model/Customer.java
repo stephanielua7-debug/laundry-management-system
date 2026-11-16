@@ -1,4 +1,3 @@
-
 package model;
 
 // Customer class belongs to the model package.
