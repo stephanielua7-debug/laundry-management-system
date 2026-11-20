@@ -1,4 +1,3 @@
-
 package model;
 
 // LaundryItem class belongs to the model package.
