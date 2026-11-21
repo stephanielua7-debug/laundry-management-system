@@ -8,11 +8,8 @@ public class Customer {
     private String contactNumber;
 
     // Constructor for Customer Management
-    public Customer(
-            String customerId,
-            String customerName,
+    public Customer(String customerId, String customerName,
             String contactNumber) {
-
         this.customerId = customerId;
         this.customerName = customerName;
         this.contactNumber = contactNumber;
@@ -20,13 +17,11 @@ public class Customer {
 
     // Constructor for Laundry Receiving
     public Customer(String customerName, String contactNumber) {
-
         this.customerName = customerName;
         this.contactNumber = contactNumber;
     }
 
-    // GETTERS
-
+    // Getters
     public String getCustomerId() {
         return customerId;
     }
@@ -39,13 +34,20 @@ public class Customer {
         return contactNumber;
     }
 
-    // SETTERS
-
+    // Setters
     public void setCustomerName(String customerName) {
         this.customerName = customerName;
     }
 
     public void setContactNumber(String contactNumber) {
         this.contactNumber = contactNumber;
+    }
+
+    // Display customer information
+    @Override
+    public String toString() {
+        return "Customer ID: " + customerId +
+                "\nCustomer Name: " + customerName +
+                "\nPhone Number: " + contactNumber;
     }
 }
