@@ -15,8 +15,14 @@ public class LaundryOrder {
     private double pricePerKg;
     private double totalAmount;
 
-    public LaundryOrder(String orderId, Customer customer,
-            double weight, String serviceName,
+    private String paymentStatus;
+    private String orderStatus;
+
+    public LaundryOrder(
+            String orderId,
+            Customer customer,
+            double weight,
+            String serviceName,
             double pricePerKg) {
 
         this.orderId = orderId;
@@ -24,9 +30,13 @@ public class LaundryOrder {
         this.weight = weight;
         this.serviceName = serviceName;
         this.pricePerKg = pricePerKg;
+
         this.totalAmount = weight * pricePerKg;
 
         this.laundryItems = new ArrayList<>();
+
+        this.paymentStatus = "Unpaid";
+        this.orderStatus = "Pending";
     }
 
     public void addLaundryItem(LaundryItem item) {
@@ -59,5 +69,21 @@ public class LaundryOrder {
 
     public double getTotalAmount() {
         return totalAmount;
+    }
+
+    public String getPaymentStatus() {
+        return paymentStatus;
+    }
+
+    public void setPaymentStatus(String paymentStatus) {
+        this.paymentStatus = paymentStatus;
+    }
+
+    public String getOrderStatus() {
+        return orderStatus;
+    }
+
+    public void setOrderStatus(String orderStatus) {
+        this.orderStatus = orderStatus;
     }
 }

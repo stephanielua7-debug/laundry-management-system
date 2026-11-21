@@ -1,49 +1,115 @@
+
 package view;
 
+import java.util.Scanner;
 import model.LaundryOrder;
-import model.LaundryService;
-import java.util.Collection;
+import model.LaundryItem;
 
 public class LaundryReceivingView {
 
-    // Displays all available laundry services.
-    public void displayServices(Collection<LaundryService> services) {
+    private Scanner scanner;
 
-        System.out.println("\n========== AVAILABLE SERVICES ==========");
+    public LaundryReceivingView(Scanner scanner) {
+        this.scanner = scanner;
+    }
 
-        // Checks if there are no available services.
-        if (services.isEmpty()) {
-            System.out.println("No laundry services available.");
-            return;
-        }
+    public String getInput(String message) {
+        System.out.print(message);
+        return scanner.nextLine().trim();
+    }
 
-        // Displays each laundry service.
-        for (LaundryService service : services) {
-            System.out.println(service);
+    public int getInteger(String message) {
+        while (true) {
+            try {
+                System.out.print(message);
+                int value = Integer.parseInt(scanner.nextLine().trim());
+
+                if (value > 0) {
+                    return value;
+                }
+
+                System.out.println("Please enter a number greater than zero.");
+
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input. Please enter a whole number.");
+            }
         }
     }
 
-    // Displays the receipt of a laundry order.
-    public void displayOrder(LaundryOrder order) {
+    public double getWeight() {
+        while (true) {
+            try {
+                System.out.print("Enter Total Weight (kg): ");
 
-        System.out.println("\n========== LAUNDRY RECEIPT ==========");
+                double weight = Double.parseDouble(
+                        scanner.nextLine().trim());
 
-        // Displays the order and customer information.
+                if (Double.isFinite(weight) && weight > 0) {
+                    return weight;
+                }
+
+                System.out.println("Weight must be greater than zero.");
+
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid weight. Try again.");
+            }
+        }
+    }
+
+    public void displayServices() {
+        System.out.println("\n========== AVAILABLE SERVICES ==========");
+        System.out.println("1. Wash and Dry       - PHP 35/kg");
+        System.out.println("2. Wash, Dry and Fold - PHP 45/kg");
+        System.out.println("3. Ironing            - PHP 25/kg");
+    }
+
+    public int selectService() {
+        while (true) {
+            int choice = getInteger("Select Service: ");
+
+            if (choice >= 1 && choice <= 3) {
+                return choice;
+            }
+
+            System.out.println("Invalid service selection.");
+        }
+    }
+
+    public void displayOrderSummary(LaundryOrder order) {
+
+        System.out.println("\n========================================");
+        System.out.println("           LAUNDRY ORDER SUMMARY");
+        System.out.println("========================================");
+
         System.out.println("Order ID: " + order.getOrderId());
-        System.out.println("Customer ID: " + order.getCustomerId());
-        System.out.println("Service ID: " + order.getServiceId());
-        System.out.println("Laundry Weight: " + order.getWeightKg() + " kg");
 
-        // Displays the total amount with two decimal places.
+        System.out.println("Customer: "
+                + order.getCustomer().getCustomerName());
+
+        System.out.println("Contact: "
+                + order.getCustomer().getContactNumber());
+
+        System.out.println("\nLaundry Items:");
+
+        int totalPieces = 0;
+
+        for (LaundryItem item : order.getLaundryItems()) {
+            System.out.println("- " + item);
+            totalPieces += item.getQuantity();
+        }
+
+        System.out.println("Total Pieces: " + totalPieces);
+
+        System.out.println("\nService: " + order.getServiceName());
+
+        System.out.printf("Weight: %.2f kg%n", order.getWeight());
+
+        System.out.printf("Price per kg: PHP %.2f%n",
+                order.getPricePerKg());
+
         System.out.printf("Total Amount: PHP %.2f%n",
                 order.getTotalAmount());
 
-        // Displays the dates, status, and payment information.
-        System.out.println("Received Date: " + order.getReceivedDate());
-        System.out.println("Due Date: " + order.getDueDate());
-        System.out.println("Status: " + order.getStatus());
-        System.out.println("Payment: " + order.getPaymentStatus());
-
-        System.out.println("=====================================");
+        System.out.println("========================================");
     }
 }
