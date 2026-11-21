@@ -34,9 +34,8 @@ public class PaymentView {
         System.out.println("Payment ID: " + payment.getPaymentId());
         System.out.println("Order ID: " + payment.getOrderId());
 
-        // Displays the amount paid.
-        System.out.printf("Amount Paid: PHP %.2f%n",
-                payment.getAmount());
+        // Shows how much the customer paid.
+        System.out.println("Amount Paid: PHP " + payment.getAmount());
 
         // Displays payment information.
         System.out.println("Payment Method: " + payment.getPaymentMethod());
