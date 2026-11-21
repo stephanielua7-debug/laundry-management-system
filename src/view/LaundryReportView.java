@@ -1,3 +1,4 @@
+
 package view;
 
 import model.*;
@@ -28,12 +29,12 @@ public class LaundryReportView {
                         totalOrders++;
 
                         // Counts claimed orders.
-                        if (order.getStatus().equals("Claimed")) {
+                        if (order.getOrderStatus().equals("Claimed")) {
                                 claimedOrders++;
                         }
 
                         // Counts pending orders.
-                        if (order.getStatus().equals("Pending")) {
+                        if (order.getOrderStatus().equals("Pending")) {
                                 pendingOrders++;
                         }
 
@@ -47,8 +48,9 @@ public class LaundryReportView {
                 System.out.println("Claimed Orders: " + claimedOrders);
                 System.out.println("Pending Orders: " + pendingOrders);
 
-                // Displays the total payments received.
-                System.out.printf("Total Payments Received: PHP %.2f%n",
+                // Displays total payments received.
+                System.out.printf(
+                                "Total Payments Received: PHP %.2f%n",
                                 totalPaid);
 
                 // Displays the bottom border.
