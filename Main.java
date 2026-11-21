@@ -1,7 +1,6 @@
 import java.util.Scanner;
 
 import controller.*;
-import model.LaundryService;
 import repository.*;
 import service.*;
 import view.*;
@@ -88,7 +87,8 @@ public class Main {
 
                 CustomerView customerView = new CustomerView();
 
-                LaundryReceivingView receivingView = new LaundryReceivingView();
+                // Pass the existing Scanner
+                LaundryReceivingView receivingView = new LaundryReceivingView(scanner);
 
                 LaundryServiceView serviceView = new LaundryServiceView();
 
@@ -108,6 +108,8 @@ public class Main {
                                 customerService,
                                 customerView);
 
+                // Updated constructor to match
+                // LaundryReceivingController
                 LaundryReceivingController receivingController = new LaundryReceivingController(
                                 receivingService,
                                 customerService,
@@ -164,7 +166,6 @@ public class Main {
 
                 while (running) {
 
-                        // Clear previous screen before showing menu
                         clearScreen();
 
                         int choice = mainMenu.displayMenu();
@@ -224,9 +225,7 @@ public class Main {
 
                                 default:
                                         System.out.println("\nInvalid choice!");
-                                        System.out.println(
-                                                        "Press ENTER to continue...");
-
+                                        System.out.println("Press ENTER to continue...");
                                         scanner.nextLine();
                                         break;
                         }
