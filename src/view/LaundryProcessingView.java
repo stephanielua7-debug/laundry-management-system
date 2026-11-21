@@ -5,15 +5,18 @@ import java.util.Collection;
 
 public class LaundryProcessingView {
 
+    // Displays all laundry orders.
     public void displayOrders(Collection<LaundryOrder> orders) {
 
         System.out.println("\n========== LAUNDRY ORDERS ==========");
 
+        // Checks if there are no orders.
         if (orders.isEmpty()) {
             System.out.println("No laundry orders found.");
             return;
         }
 
+        // Displays each laundry order.
         for (LaundryOrder order : orders) {
             System.out.println(order);
         }
@@ -21,6 +24,7 @@ public class LaundryProcessingView {
         System.out.println("====================================");
     }
 
+    // Displays available laundry status options.
     public void displayStatusOptions() {
 
         System.out.println("\n========== UPDATE LAUNDRY STATUS ==========");
