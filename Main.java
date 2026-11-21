@@ -61,10 +61,7 @@ public class Main {
 
                 LaundryServiceManager laundryServiceManager = new LaundryServiceManager(serviceRepository);
 
-                LaundryReceivingService receivingService = new LaundryReceivingService(
-                                orderRepository,
-                                customerRepository,
-                                serviceRepository);
+                LaundryReceivingService receivingService = new LaundryReceivingService();
 
                 LaundryProcessingService processingService = new LaundryProcessingService(orderRepository);
 

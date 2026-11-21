@@ -1,106 +1,145 @@
+
 package controller;
 
-import model.LaundryItem;
-import model.LaundryOrder;
-import service.*;
-import view.*;
-import util.ConsoleHelper;
-import util.DateUtil;
-
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import model.Customer;
+import model.LaundryOrder;
+import model.LaundryItem;
+
+import service.LaundryReceivingService;
+import service.CustomerService;
+import service.LaundryServiceManager;
+
+import view.LaundryReceivingView;
+
 public class LaundryReceivingController {
 
-    private LaundryReceivingService receivingService;
-    private CustomerService customerService;
-    private LaundryServiceManager laundryServiceManager;
-    private LaundryReceivingView receivingView;
-    private CustomerView customerView;
+    private LaundryReceivingView view;
+    private LaundryReceivingService service;
 
+    private List<LaundryItem> pendingItems = new ArrayList<>();
+
+    // CONSTRUCTOR
     public LaundryReceivingController(
-            LaundryReceivingService receivingService,
+            LaundryReceivingService service,
             CustomerService customerService,
             LaundryServiceManager laundryServiceManager,
-            LaundryReceivingView receivingView) {
+            LaundryReceivingView view) {
 
-        this.receivingService = receivingService;
-        this.customerService = customerService;
-        this.laundryServiceManager = laundryServiceManager;
-        this.receivingView = receivingView;
-        this.customerView = new CustomerView();
+        this.service = service;
+        this.view = view;
     }
 
+    // RECEIVE LAUNDRY
     public void receiveLaundry() {
 
-        try {
+        System.out.println("\n========== LAUNDRY RECEIVING ==========");
+        System.out.println("ADMIN: Enter Customer Information\n");
 
-            if (customerService.getAllCustomers().isEmpty()) {
-                System.out.println("Please register a customer first.");
-                ConsoleHelper.pause();
-                return;
+        pendingItems.clear();
+
+        // CUSTOMER INFORMATION
+        String name;
+
+        do {
+            name = view.getInput("Customer Name: ");
+
+            if (name.isEmpty()) {
+                System.out.println("Customer name cannot be empty.");
             }
 
-            customerView.displayCustomers(
-                    customerService.getAllCustomers());
+        } while (name.isEmpty());
 
-            String customerId = ConsoleHelper.readString("Enter Customer ID: ");
+        String contact;
 
-            if (customerService.findCustomer(customerId) == null) {
-                System.out.println("Customer not found!");
-                ConsoleHelper.pause();
-                return;
+        do {
+            contact = view.getInput("Contact Number: ");
+
+            if (contact.isEmpty()) {
+                System.out.println("Contact number cannot be empty.");
             }
 
-            receivingView.displayServices(
-                    laundryServiceManager.getAllServices());
+        } while (contact.isEmpty());
 
-            String serviceId = ConsoleHelper.readString("Enter Service ID: ");
+        Customer customer = new Customer(name, contact);
 
-            double weight = ConsoleHelper.readDouble("Laundry Weight (kg): ");
+        // LAUNDRY ITEMS
+        System.out.println("\n========== LAUNDRY ITEMS ==========");
+        System.out.println("Enter the clothes submitted by the customer.");
+        System.out.println("Press ENTER on Item Name when finished.\n");
 
-            String dateInput = ConsoleHelper.readString("Due Date (YYYY-MM-DD): ");
+        int totalPieces = 0;
 
-            LocalDate dueDate = DateUtil.parseDate(dateInput);
+        while (true) {
 
-            List<LaundryItem> items = new ArrayList<>();
+            String itemName = view.getInput("Item Name: ");
 
-            System.out.println("\nEnter Laundry Items");
+            if (itemName.isEmpty()) {
 
-            while (true) {
-
-                String itemName = ConsoleHelper.readString(
-                        "Item Name (blank to finish): ");
-
-                if (itemName.isEmpty()) {
-                    break;
-                }
-
-                int quantity = ConsoleHelper.readInt("Quantity: ");
-
-                if (quantity <= 0) {
-                    System.out.println("Quantity must be greater than zero.");
+                if (totalPieces == 0) {
+                    System.out.println(
+                            "Please enter at least one laundry item.");
                     continue;
                 }
 
-                items.add(new LaundryItem(itemName, quantity));
+                break;
             }
 
-            LaundryOrder order = receivingService.receiveLaundry(
-                    customerId,
-                    serviceId,
-                    weight,
-                    dueDate,
-                    items);
+            int quantity = view.getInteger("Quantity: ");
 
-            receivingView.displayOrder(order);
+            pendingItems.add(new LaundryItem(itemName, quantity));
 
-        } catch (Exception e) {
+            totalPieces += quantity;
 
-            System.out.println("Error: " + e.getMessage());
+            System.out.println("Item added successfully!\n");
         }
 
-        ConsoleHelper.pause();
+        // SELECT LAUNDRY SERVICE
+        view.displayServices();
+
+        int choice = view.selectService();
+
+        String serviceName;
+        double pricePerKg;
+
+        switch (choice) {
+
+            case 1:
+                serviceName = "Wash and Dry";
+                pricePerKg = 35;
+                break;
+
+            case 2:
+                serviceName = "Wash, Dry and Fold";
+                pricePerKg = 45;
+                break;
+
+            default:
+                serviceName = "Ironing";
+                pricePerKg = 25;
+                break;
+        }
+
+        // ENTER WEIGHT
+        double weight = view.getWeight();
+
+        // CREATE ORDER
+        LaundryOrder order = service.createOrder(
+                customer,
+                weight,
+                serviceName,
+                pricePerKg);
+
+        // ADD LAUNDRY ITEMS
+        for (LaundryItem item : pendingItems) {
+            order.addLaundryItem(item);
+        }
+
+        // DISPLAY ORDER SUMMARY
+        view.displayOrderSummary(order);
+
+        pendingItems.clear();
     }
 }
