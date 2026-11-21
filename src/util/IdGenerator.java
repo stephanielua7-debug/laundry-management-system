@@ -8,19 +8,23 @@ public class IdGenerator {
     private static int serviceCounter = 1;
     private static int paymentCounter = 1;
 
+    // Generates customer ID (1, 2, 3...)
     public static String generateCustomerId() {
-        return String.format("CUS%04d", customerCounter++);
+        return String.valueOf(customerCounter++);
     }
 
+    // Generates order ID (1, 2, 3...)
     public static String generateOrderId() {
-        return String.format("LND%04d", orderCounter++);
+        return String.valueOf(orderCounter++);
     }
 
+    // Generates service ID (1, 2, 3...)
     public static String generateServiceId() {
-        return String.format("SRV%03d", serviceCounter++);
+        return String.valueOf(serviceCounter++);
     }
 
+    // Generates payment ID (1, 2, 3...)
     public static String generatePaymentId() {
-        return String.format("PAY%04d", paymentCounter++);
+        return String.valueOf(paymentCounter++);
     }
 }
