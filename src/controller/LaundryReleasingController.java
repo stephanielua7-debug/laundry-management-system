@@ -1,4 +1,3 @@
-
 package controller;
 
 import service.LaundryReleasingService;
@@ -40,8 +39,7 @@ public class LaundryReleasingController {
 
         } catch (Exception e) {
 
-            releasingView.displayMessage(
-                    "Error: " + e.getMessage());
+            releasingView.displayMessage("Error: " + e.getMessage());
         }
 
         ConsoleHelper.pause();

@@ -18,6 +18,7 @@ public class LaundryOrder {
     private String paymentStatus;
     private String orderStatus;
 
+    // CONSTRUCTOR
     public LaundryOrder(
             String orderId,
             Customer customer,
@@ -39,10 +40,12 @@ public class LaundryOrder {
         this.orderStatus = "Pending";
     }
 
+    // ADD LAUNDRY ITEM
     public void addLaundryItem(LaundryItem item) {
         laundryItems.add(item);
     }
 
+    // GETTERS
     public String getOrderId() {
         return orderId;
     }
@@ -75,6 +78,7 @@ public class LaundryOrder {
         return paymentStatus;
     }
 
+    // SETTERS
     public void setPaymentStatus(String paymentStatus) {
         this.paymentStatus = paymentStatus;
     }

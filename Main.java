@@ -61,7 +61,11 @@ public class Main {
 
                 LaundryServiceManager laundryServiceManager = new LaundryServiceManager(serviceRepository);
 
-                LaundryReceivingService receivingService = new LaundryReceivingService();
+                // UPDATED: Pass CustomerService
+                // to LaundryReceivingService
+                LaundryReceivingService receivingService = new LaundryReceivingService(
+                                customerService,
+                                orderRepository);
 
                 LaundryProcessingService processingService = new LaundryProcessingService(orderRepository);
 
@@ -84,7 +88,6 @@ public class Main {
 
                 CustomerView customerView = new CustomerView();
 
-                // Pass the existing Scanner
                 LaundryReceivingView receivingView = new LaundryReceivingView(scanner);
 
                 LaundryServiceView serviceView = new LaundryServiceView();
@@ -105,8 +108,6 @@ public class Main {
                                 customerService,
                                 customerView);
 
-                // Updated constructor to match
-                // LaundryReceivingController
                 LaundryReceivingController receivingController = new LaundryReceivingController(
                                 receivingService,
                                 customerService,
@@ -120,7 +121,7 @@ public class Main {
                 LaundryProcessingController processingController = new LaundryProcessingController(
                                 processingService,
                                 orderRepository,
-                                processingView);
+                                processingView, scanner);
 
                 LaundryReleasingController releasingController = new LaundryReleasingController(
                                 releasingService,
@@ -212,7 +213,7 @@ public class Main {
                                                         "\n==================================");
 
                                         System.out.println(
-                                                        " THANK YOU FOR USING MY SYSTEM!");
+                                                        " THANK YOU FOR USING LAUNDRY MANAGEMENT SYSTEM!");
 
                                         System.out.println(
                                                         "==================================");

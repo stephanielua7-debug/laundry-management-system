@@ -1,3 +1,4 @@
+
 package repository;
 
 // Imports the LaundryOrder class
@@ -28,4 +29,5 @@ public class LaundryOrderRepository {
     public Collection<LaundryOrder> findAll() {
         return orders.values();
     }
+
 }

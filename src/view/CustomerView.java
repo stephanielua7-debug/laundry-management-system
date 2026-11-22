@@ -19,6 +19,7 @@ public class CustomerView {
         // Loops through the collection and displays each customer.
         for (Customer customer : customers) {
             System.out.println(customer);
+            System.out.println(); // Adds spacing between customers
         }
 
         System.out.println("===================================");

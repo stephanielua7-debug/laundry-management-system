@@ -2,6 +2,7 @@
 package controller;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import model.Customer;
@@ -18,6 +19,7 @@ public class LaundryReceivingController {
 
     private LaundryReceivingView view;
     private LaundryReceivingService service;
+    private CustomerService customerService;
 
     private List<LaundryItem> pendingItems = new ArrayList<>();
 
@@ -29,6 +31,7 @@ public class LaundryReceivingController {
             LaundryReceivingView view) {
 
         this.service = service;
+        this.customerService = customerService;
         this.view = view;
     }
 
@@ -36,34 +39,50 @@ public class LaundryReceivingController {
     public void receiveLaundry() {
 
         System.out.println("\n========== LAUNDRY RECEIVING ==========");
-        System.out.println("ADMIN: Enter Customer Information\n");
 
         pendingItems.clear();
 
-        // CUSTOMER INFORMATION
-        String name;
+        // DISPLAY REGISTERED CUSTOMERS
+        Collection<Customer> customers = customerService.getAllCustomers();
 
-        do {
-            name = view.getInput("Customer Name: ");
+        if (customers.isEmpty()) {
 
-            if (name.isEmpty()) {
-                System.out.println("Customer name cannot be empty.");
+            System.out.println("\nNo registered customers found!");
+            System.out.println("Please add a customer first.");
+
+            view.getInput("\nPress ENTER to continue...");
+            return;
+        }
+
+        System.out.println("\n========== REGISTERED CUSTOMERS ==========");
+
+        for (Customer customer : customers) {
+
+            System.out.println(
+                    customer.getCustomerId() + " - "
+                            + customer.getCustomerName() + " - "
+                            + customer.getContactNumber());
+        }
+
+        // SELECT CUSTOMER
+        Customer customer = null;
+
+        while (customer == null) {
+
+            String customerId = view.getInput("\nEnter Customer ID: ");
+
+            customer = customerService.findCustomerById(customerId);
+
+            if (customer == null) {
+                System.out.println("Customer not found! Try again.");
             }
+        }
 
-        } while (name.isEmpty());
-
-        String contact;
-
-        do {
-            contact = view.getInput("Contact Number: ");
-
-            if (contact.isEmpty()) {
-                System.out.println("Contact number cannot be empty.");
-            }
-
-        } while (contact.isEmpty());
-
-        Customer customer = new Customer(name, contact);
+        System.out.println("\nCustomer Selected Successfully!");
+        System.out.println("Customer Name: "
+                + customer.getCustomerName());
+        System.out.println("Contact Number: "
+                + customer.getContactNumber());
 
         // LAUNDRY ITEMS
         System.out.println("\n========== LAUNDRY ITEMS ==========");
@@ -88,6 +107,11 @@ public class LaundryReceivingController {
             }
 
             int quantity = view.getInteger("Quantity: ");
+
+            if (quantity <= 0) {
+                System.out.println("Quantity must be greater than zero.");
+                continue;
+            }
 
             pendingItems.add(new LaundryItem(itemName, quantity));
 
@@ -116,10 +140,15 @@ public class LaundryReceivingController {
                 pricePerKg = 45;
                 break;
 
-            default:
+            case 3:
                 serviceName = "Ironing";
                 pricePerKg = 25;
                 break;
+
+            default:
+                System.out.println("Invalid service selection.");
+                pendingItems.clear();
+                return;
         }
 
         // ENTER WEIGHT
@@ -136,6 +165,9 @@ public class LaundryReceivingController {
         for (LaundryItem item : pendingItems) {
             order.addLaundryItem(item);
         }
+
+        // SAVE ORDER TO REPOSITORY
+        service.saveOrder(order);
 
         // DISPLAY ORDER SUMMARY
         view.displayOrderSummary(order);

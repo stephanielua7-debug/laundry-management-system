@@ -37,13 +37,9 @@ public class LaundryReportView {
                         if (order.getOrderStatus().equals("Pending")) {
                                 pendingOrders++;
                         }
-
-                        // Displays the order details.
-                        System.out.println(order);
                 }
 
                 // Displays the order summary.
-                System.out.println("----------------------------------------------");
                 System.out.println("Total Laundry Orders: " + totalOrders);
                 System.out.println("Claimed Orders: " + claimedOrders);
                 System.out.println("Pending Orders: " + pendingOrders);

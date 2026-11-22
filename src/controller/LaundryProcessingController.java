@@ -1,83 +1,140 @@
-
 package controller;
+
+import java.util.Collection;
+import java.util.Scanner;
+
+import model.LaundryOrder;
 
 import service.LaundryProcessingService;
 import repository.LaundryOrderRepository;
+
 import view.LaundryProcessingView;
-import util.ConsoleHelper;
 
 public class LaundryProcessingController {
 
-    private LaundryProcessingService processingService;
-    private LaundryOrderRepository orderRepository;
-    private LaundryProcessingView processingView;
+    private LaundryProcessingService service;
+    private LaundryOrderRepository repository;
+    private LaundryProcessingView view;
+    private Scanner scanner;
 
+    // CONSTRUCTOR
     public LaundryProcessingController(
-            LaundryProcessingService processingService,
-            LaundryOrderRepository orderRepository,
-            LaundryProcessingView processingView) {
+            LaundryProcessingService service,
+            LaundryOrderRepository repository,
+            LaundryProcessingView view,
+            Scanner scanner) {
 
-        this.processingService = processingService;
-        this.orderRepository = orderRepository;
-        this.processingView = processingView;
+        this.service = service;
+        this.repository = repository;
+        this.view = view;
+        this.scanner = scanner;
     }
 
+    // SHOW LAUNDRY PROCESSING MENU
     public void showMenu() {
 
-        while (true) {
+        boolean running = true;
+
+        while (running) {
 
             System.out.println("\n========== LAUNDRY PROCESSING ==========");
+
             System.out.println("1. View Laundry Orders");
             System.out.println("2. Update Laundry Status");
             System.out.println("0. Back to Main Menu");
 
-            int choice = ConsoleHelper.readInt("Enter choice: ");
+            System.out.print("\nEnter choice: ");
 
-            switch (choice) {
+            try {
 
-                case 1:
-                    processingView.displayOrders(
-                            orderRepository.findAll());
-                    ConsoleHelper.pause();
-                    break;
+                int choice = Integer.parseInt(scanner.nextLine());
 
-                case 2:
-                    updateStatus();
-                    break;
+                switch (choice) {
 
-                case 0:
-                    return;
+                    case 1:
+                        viewLaundryOrders();
+                        break;
 
-                default:
-                    System.out.println("Invalid choice!");
+                    case 2:
+                        updateLaundryStatus();
+                        break;
+
+                    case 0:
+                        running = false;
+                        break;
+
+                    default:
+                        System.out.println("\nInvalid choice!");
+                        break;
+                }
+
+            } catch (NumberFormatException e) {
+                System.out.println("\nPlease enter a valid number!");
             }
         }
     }
 
-    private void updateStatus() {
+    // VIEW ALL LAUNDRY ORDERS
+    public void viewLaundryOrders() {
 
-        processingView.displayOrders(
-                orderRepository.findAll());
+        Collection<LaundryOrder> orders = repository.findAll();
 
-        String orderId = ConsoleHelper.readString("Enter Order ID: ");
+        view.displayOrders(orders);
 
-        processingView.displayStatusOptions();
+        System.out.print("\nPress ENTER to continue...");
+        scanner.nextLine();
+    }
 
-        int statusChoice = ConsoleHelper.readInt("Select New Status: ");
+    // UPDATE LAUNDRY STATUS
+    public void updateLaundryStatus() {
+
+        System.out.println("UPDATE LAUNDRY STATUS");
+
+        System.out.print("\nEnter Order ID: ");
+        String orderId = scanner.nextLine();
+
+        LaundryOrder order = repository.findById(orderId);
+
+        if (order == null) {
+
+            System.out.println("Order not found!");
+
+            System.out.print("\nPress ENTER to continue...");
+            scanner.nextLine();
+            return;
+        }
+
+        System.out.println("Customer: "
+                + order.getCustomer().getCustomerName());
+
+        System.out.println("Current Status: "
+                + order.getOrderStatus());
+
+        view.displayStatusOptions();
+
+        System.out.print("\nSelect New Status: ");
 
         try {
 
-            processingService.updateLaundryStatus(
-                    orderId,
-                    statusChoice);
+            int choice = Integer.parseInt(scanner.nextLine());
 
-            System.out.println("\nLaundry Status Updated Successfully!");
+            service.updateLaundryStatus(orderId, choice);
 
-        } catch (Exception e) {
+            System.out.println("\nLaundry status updated successfully!");
+
+            System.out.println("New Status: "
+                    + order.getOrderStatus());
+
+        } catch (NumberFormatException e) {
+
+            System.out.println("\nPlease enter a valid number!");
+
+        } catch (IllegalArgumentException e) {
 
             System.out.println("Error: " + e.getMessage());
         }
 
-        ConsoleHelper.pause();
+        System.out.print("\nPress ENTER to continue...");
+        scanner.nextLine();
     }
 }
