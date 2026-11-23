@@ -1,8 +1,11 @@
+
 package controller;
 
 import service.CustomerService;
 import view.CustomerView;
+
 import util.ConsoleHelper;
+import util.ConsoleFormatter;
 
 public class CustomerController {
 
@@ -21,7 +24,8 @@ public class CustomerController {
 
         while (true) {
 
-            System.out.println("\n========== CUSTOMER MANAGEMENT ==========");
+            ConsoleFormatter.printHeader("CUSTOMER MANAGEMENT");
+
             System.out.println("1. Add Customer");
             System.out.println("2. View Customers");
             System.out.println("0. Back to Main Menu");
@@ -37,6 +41,7 @@ public class CustomerController {
                 case 2:
                     customerView.displayCustomers(
                             customerService.getAllCustomers());
+
                     ConsoleHelper.pause();
                     break;
 
@@ -44,11 +49,13 @@ public class CustomerController {
                     return;
 
                 default:
-                    System.out.println("Invalid choice!");
+                    ConsoleFormatter.printError("Invalid choice!");
+                    ConsoleHelper.pause();
             }
         }
     }
 
+    // ADD CUSTOMER
     private void addCustomer() {
 
         String name = ConsoleHelper.readString("Customer Name: ");
@@ -56,13 +63,17 @@ public class CustomerController {
 
         try {
 
-            System.out.println("\nCustomer Added Successfully!");
+            System.out.println();
 
             System.out.println(
                     customerService.addCustomer(name, phone));
 
+            ConsoleFormatter.printSuccess(
+                    "Customer Added Successfully!");
+
         } catch (Exception e) {
-            System.out.println("Error: " + e.getMessage());
+
+            ConsoleFormatter.printError(e.getMessage());
         }
 
         ConsoleHelper.pause();

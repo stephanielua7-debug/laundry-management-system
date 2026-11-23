@@ -1,9 +1,11 @@
+
 package controller;
 
 import model.LaundryService;
 import service.LaundryServiceManager;
 import view.LaundryServiceView;
 import util.ConsoleHelper;
+import util.ConsoleFormatter;
 
 public class LaundryServiceController {
 
@@ -23,7 +25,8 @@ public class LaundryServiceController {
 
         while (true) {
 
-            System.out.println("\n========== LAUNDRY SERVICES ==========");
+            ConsoleFormatter.printHeader("LAUNDRY SERVICES");
+
             System.out.println("1. Add Laundry Service");
             System.out.println("2. View Laundry Services");
             System.out.println("3. Update Laundry Service");
@@ -59,7 +62,7 @@ public class LaundryServiceController {
                     return;
 
                 default:
-                    System.out.println("Invalid choice!");
+                    ConsoleFormatter.printError("Invalid choice!");
                     ConsoleHelper.pause();
             }
         }
@@ -69,17 +72,20 @@ public class LaundryServiceController {
     private void addService() {
 
         try {
+
             String name = ConsoleHelper.readString("Service Name: ");
             String description = ConsoleHelper.readString("Description: ");
             double price = ConsoleHelper.readDouble("Price per KG: ");
 
             LaundryService service = serviceManager.addService(name, description, price);
 
-            System.out.println("\nService Added Successfully!");
+            ConsoleFormatter.printSuccess("Service Added Successfully!");
+
             serviceView.displayService(service);
 
         } catch (Exception e) {
-            System.out.println("\nError: " + e.getMessage());
+
+            ConsoleFormatter.printError(e.getMessage());
         }
 
         ConsoleHelper.pause();
@@ -98,37 +104,42 @@ public class LaundryServiceController {
 
         serviceView.displayServices(serviceManager.getAllServices());
 
-        String id = ConsoleHelper.readString("\nEnter Service ID to update: ");
+        String id = ConsoleHelper.readString(
+                "\nEnter Service ID to update: ");
 
         LaundryService existing = serviceManager.findService(id);
 
         if (existing == null) {
-            System.out.println("\nService not found!");
+
+            ConsoleFormatter.printError("Service not found!");
             ConsoleHelper.pause();
             return;
         }
 
-        System.out.println("\n========== UPDATE SERVICE ==========");
+        ConsoleFormatter.printHeader("UPDATE SERVICE");
 
         serviceView.displayService(existing);
 
         try {
+
             String name = ConsoleHelper.readString("New Service Name: ");
-
             String description = ConsoleHelper.readString("New Description: ");
-
             double price = ConsoleHelper.readDouble("New Price per KG: ");
 
             LaundryService updated = serviceManager.updateService(
                     id, name, description, price);
 
             if (updated != null) {
-                System.out.println("\nService Updated Successfully!");
+
+                ConsoleFormatter.printSuccess(
+                        "Service Updated Successfully!");
+
                 serviceView.displayService(updated);
             }
 
         } catch (Exception e) {
-            System.out.println("\nError: " + e.getMessage());
+
+            ConsoleFormatter.printError(e.getMessage());
         }
 
         ConsoleHelper.pause();
@@ -139,12 +150,14 @@ public class LaundryServiceController {
 
         serviceView.displayServices(serviceManager.getAllServices());
 
-        String id = ConsoleHelper.readString("\nEnter Service ID to delete: ");
+        String id = ConsoleHelper.readString(
+                "\nEnter Service ID to delete: ");
 
         LaundryService existing = serviceManager.findService(id);
 
         if (existing == null) {
-            System.out.println("\nService not found!");
+
+            ConsoleFormatter.printError("Service not found!");
             ConsoleHelper.pause();
             return;
         }
@@ -159,13 +172,15 @@ public class LaundryServiceController {
             boolean deleted = serviceManager.deleteService(id);
 
             if (deleted) {
-                System.out.println("\nService Deleted Successfully!");
+                ConsoleFormatter.printSuccess(
+                        "Service Deleted Successfully!");
             } else {
-                System.out.println("\nUnable to delete service.");
+                ConsoleFormatter.printError(
+                        "Unable to delete service.");
             }
 
         } else {
-            System.out.println("\nDelete cancelled.");
+            ConsoleFormatter.printInfo("Delete cancelled.");
         }
 
         ConsoleHelper.pause();
@@ -179,9 +194,12 @@ public class LaundryServiceController {
         LaundryService service = serviceManager.findService(id);
 
         if (service == null) {
-            System.out.println("\nService not found!");
+
+            ConsoleFormatter.printError("Service not found!");
+
         } else {
-            System.out.println("\nService Found!");
+
+            ConsoleFormatter.printSuccess("Service Found!");
             serviceView.displayService(service);
         }
 

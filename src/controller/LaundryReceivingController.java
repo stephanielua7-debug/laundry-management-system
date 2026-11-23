@@ -1,3 +1,4 @@
+
 package controller;
 
 import java.util.ArrayList;
@@ -14,6 +15,7 @@ import service.CustomerService;
 import service.LaundryServiceManager;
 
 import view.LaundryReceivingView;
+import util.ConsoleFormatter;
 
 public class LaundryReceivingController {
 
@@ -24,7 +26,6 @@ public class LaundryReceivingController {
 
     private List<LaundryItem> pendingItems = new ArrayList<>();
 
-    // CONSTRUCTOR
     public LaundryReceivingController(
             LaundryReceivingService service,
             CustomerService customerService,
@@ -40,7 +41,7 @@ public class LaundryReceivingController {
     // RECEIVE LAUNDRY
     public void receiveLaundry() {
 
-        System.out.println("\n========== LAUNDRY RECEIVING ==========");
+        ConsoleFormatter.printHeader("LAUNDRY RECEIVING");
 
         pendingItems.clear();
 
@@ -49,14 +50,17 @@ public class LaundryReceivingController {
 
         if (customers.isEmpty()) {
 
-            System.out.println("\nNo registered customers found!");
-            System.out.println("Please add a customer first.");
+            ConsoleFormatter.printError(
+                    "No registered customers found!");
+
+            ConsoleFormatter.printInfo(
+                    "Please add a customer first.");
 
             view.getInput("\nPress ENTER to continue...");
             return;
         }
 
-        System.out.println("\n========== REGISTERED CUSTOMERS ==========");
+        ConsoleFormatter.printSection("REGISTERED CUSTOMERS");
 
         for (Customer customer : customers) {
 
@@ -71,25 +75,33 @@ public class LaundryReceivingController {
 
         while (customer == null) {
 
-            String customerId = view.getInput("\nEnter Customer ID: ").trim();
+            String customerId = view.getInput(
+                    "\nEnter Customer ID: ").trim();
 
             customer = customerService.findCustomerById(customerId);
 
             if (customer == null) {
-                System.out.println("Customer not found! Try again.");
+                ConsoleFormatter.printError(
+                        "Customer not found! Try again.");
             }
         }
 
-        System.out.println("\nCustomer Selected Successfully!");
+        ConsoleFormatter.printSuccess("Customer Selected Successfully!");
+
         System.out.println("Customer Name: "
                 + customer.getCustomerName());
+
         System.out.println("Contact Number: "
                 + customer.getContactNumber());
 
         // LAUNDRY ITEMS
-        System.out.println("\n========== LAUNDRY ITEMS ==========");
-        System.out.println("Enter the clothes submitted by the customer.");
-        System.out.println("Press ENTER on Item Name when finished.\n");
+        ConsoleFormatter.printSection("LAUNDRY ITEMS");
+
+        System.out.println(
+                "Enter the clothes submitted by the customer.");
+
+        System.out.println(
+                "Press ENTER on Item Name when finished.\n");
 
         int totalPieces = 0;
 
@@ -100,8 +112,10 @@ public class LaundryReceivingController {
             if (itemName.trim().isEmpty()) {
 
                 if (totalPieces == 0) {
-                    System.out.println(
+
+                    ConsoleFormatter.printError(
                             "Please enter at least one laundry item.");
+
                     continue;
                 }
 
@@ -111,8 +125,10 @@ public class LaundryReceivingController {
             int quantity = view.getInteger("Quantity: ");
 
             if (quantity <= 0) {
-                System.out.println(
+
+                ConsoleFormatter.printError(
                         "Quantity must be greater than zero.");
+
                 continue;
             }
 
@@ -120,7 +136,7 @@ public class LaundryReceivingController {
 
             totalPieces += quantity;
 
-            System.out.println("Item added successfully!\n");
+            ConsoleFormatter.printSuccess("Item added successfully!");
         }
 
         // SELECT DYNAMIC LAUNDRY SERVICE
@@ -128,7 +144,9 @@ public class LaundryReceivingController {
 
         if (availableServices.isEmpty()) {
 
-            System.out.println("\nNo laundry services available!");
+            ConsoleFormatter.printError(
+                    "No laundry services available!");
+
             pendingItems.clear();
 
             view.getInput("\nPress ENTER to continue...");
@@ -137,7 +155,7 @@ public class LaundryReceivingController {
 
         List<LaundryService> serviceList = new ArrayList<>(availableServices);
 
-        System.out.println("\n========== AVAILABLE LAUNDRY SERVICES ==========");
+        ConsoleFormatter.printSection("AVAILABLE LAUNDRY SERVICES");
 
         for (int i = 0; i < serviceList.size(); i++) {
 
@@ -156,7 +174,9 @@ public class LaundryReceivingController {
 
         if (choice < 1 || choice > serviceList.size()) {
 
-            System.out.println("\nInvalid service selection!");
+            ConsoleFormatter.printError(
+                    "Invalid service selection!");
+
             pendingItems.clear();
             return;
         }
@@ -171,7 +191,10 @@ public class LaundryReceivingController {
         double weight = view.getWeight();
 
         if (weight <= 0) {
-            System.out.println("\nWeight must be greater than zero!");
+
+            ConsoleFormatter.printError(
+                    "Weight must be greater than zero!");
+
             pendingItems.clear();
             return;
         }

@@ -1,15 +1,15 @@
+
 import java.util.Scanner;
 
 import controller.*;
 import repository.*;
 import service.*;
 import view.*;
+import util.ConsoleFormatter;
 
 public class Main {
 
-        // =================================
         // CLEAR TERMINAL SCREEN
-        // =================================
         public static void clearScreen() {
                 System.out.print("\033[H\033[2J");
                 System.out.flush();
@@ -19,18 +19,13 @@ public class Main {
 
                 Scanner scanner = new Scanner(System.in);
 
-                // =================================
                 // ADMIN LOGIN
-                // =================================
-
                 AdminLoginView loginView = new AdminLoginView(scanner);
-
                 AdminController adminController = new AdminController(loginView);
 
                 boolean loggedIn = false;
 
                 while (!loggedIn) {
-
                         clearScreen();
 
                         loggedIn = adminController.login();
@@ -41,28 +36,17 @@ public class Main {
                         }
                 }
 
-                // =================================
                 // REPOSITORIES
-                // =================================
-
                 CustomerRepository customerRepository = new CustomerRepository();
-
                 LaundryOrderRepository orderRepository = new LaundryOrderRepository();
-
                 LaundryServiceRepository serviceRepository = new LaundryServiceRepository();
-
                 LaundryPaymentRepository paymentRepository = new LaundryPaymentRepository();
 
-                // =================================
                 // SERVICES
-                // =================================
-
                 CustomerService customerService = new CustomerService(customerRepository);
 
                 LaundryServiceManager laundryServiceManager = new LaundryServiceManager(serviceRepository);
 
-                // UPDATED: Pass CustomerService
-                // to LaundryReceivingService
                 LaundryReceivingService receivingService = new LaundryReceivingService(
                                 customerService,
                                 orderRepository);
@@ -80,33 +64,18 @@ public class Main {
                                 customerRepository,
                                 serviceRepository);
 
-                // =================================
                 // VIEWS
-                // =================================
-
                 MainMenu mainMenu = new MainMenu();
-
                 CustomerView customerView = new CustomerView();
-
                 LaundryReceivingView receivingView = new LaundryReceivingView(scanner);
-
                 LaundryServiceView serviceView = new LaundryServiceView();
-
                 LaundryProcessingView processingView = new LaundryProcessingView();
-
                 LaundryReleasingView releasingView = new LaundryReleasingView();
-
                 PaymentView paymentView = new PaymentView();
-
                 LaundryReportView reportView = new LaundryReportView();
 
-                // =================================
                 // CONTROLLERS
-                // =================================
-
-                CustomerController customerController = new CustomerController(
-                                customerService,
-                                customerView);
+                CustomerController customerController = new CustomerController(customerService, customerView);
 
                 LaundryReceivingController receivingController = new LaundryReceivingController(
                                 receivingService,
@@ -121,7 +90,8 @@ public class Main {
                 LaundryProcessingController processingController = new LaundryProcessingController(
                                 processingService,
                                 orderRepository,
-                                processingView, scanner);
+                                processingView,
+                                scanner);
 
                 LaundryReleasingController releasingController = new LaundryReleasingController(
                                 releasingService,
@@ -137,10 +107,7 @@ public class Main {
                                 reportService,
                                 reportView);
 
-                // =================================
                 // DEFAULT LAUNDRY SERVICES
-                // =================================
-
                 laundryServiceManager.addService(
                                 "Wash and Dry",
                                 "Washing and drying only",
@@ -156,10 +123,7 @@ public class Main {
                                 "Ironing service",
                                 25.00);
 
-                // =================================
                 // MAIN PROGRAM
-                // =================================
-
                 boolean running = true;
 
                 while (running) {
@@ -171,68 +135,56 @@ public class Main {
                         switch (choice) {
 
                                 case 1:
-                                        // Customer Management
                                         customerController.showMenu();
                                         break;
 
                                 case 2:
-                                        // Receive Laundry
                                         receivingController.receiveLaundry();
                                         break;
 
                                 case 3:
-                                        // Laundry Service Management
                                         serviceController.showMenu();
                                         break;
 
                                 case 4:
-                                        // Laundry Processing
                                         processingController.showMenu();
                                         break;
 
                                 case 5:
-                                        // Release Completed Laundry
                                         releasingController.releaseLaundry();
                                         break;
 
                                 case 6:
-                                        // Laundry Reports
                                         reportController.displayReport();
                                         break;
 
                                 case 7:
-                                        // Payment Management
                                         paymentController.showMenu();
                                         break;
 
                                 case 0:
-                                        // Exit Program
                                         clearScreen();
 
-                                        System.out.println(
-                                                        "\n==================================");
+                                        ConsoleFormatter.printHeader(
+                                                        "THANK YOU FOR USING");
 
                                         System.out.println(
-                                                        " THANK YOU FOR USING LAUNDRY MANAGEMENT SYSTEM!");
+                                                        "     LAUNDRY MANAGEMENT SYSTEM");
 
-                                        System.out.println(
-                                                        "==================================");
+                                        ConsoleFormatter.printFooter();
 
                                         running = false;
                                         break;
 
                                 default:
-                                        System.out.println("\nInvalid choice!");
+                                        ConsoleFormatter.printError("Invalid choice!");
                                         System.out.println("Press ENTER to continue...");
                                         scanner.nextLine();
                                         break;
                         }
                 }
 
-                // =================================
                 // CLOSE SCANNER
-                // =================================
-
                 scanner.close();
         }
 }

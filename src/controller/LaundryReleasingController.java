@@ -1,10 +1,14 @@
+
 package controller;
 
 import service.LaundryReleasingService;
 import repository.LaundryOrderRepository;
+
 import view.LaundryProcessingView;
 import view.LaundryReleasingView;
+
 import util.ConsoleHelper;
+import util.ConsoleFormatter;
 
 public class LaundryReleasingController {
 
@@ -26,10 +30,13 @@ public class LaundryReleasingController {
 
     public void releaseLaundry() {
 
+        ConsoleFormatter.printHeader("LAUNDRY RELEASING");
+
         processingView.displayOrders(
                 orderRepository.findAll());
 
-        String orderId = ConsoleHelper.readString("Enter Order ID to Release: ");
+        String orderId = ConsoleHelper.readString(
+                "Enter Order ID to Release: ");
 
         try {
 
@@ -37,9 +44,13 @@ public class LaundryReleasingController {
 
             releasingView.displayReleaseSuccess(orderId);
 
+            ConsoleFormatter.printSuccess(
+                    "Laundry successfully released!");
+
         } catch (Exception e) {
 
-            releasingView.displayMessage("Error: " + e.getMessage());
+            releasingView.displayMessage(
+                    "Error: " + e.getMessage());
         }
 
         ConsoleHelper.pause();
