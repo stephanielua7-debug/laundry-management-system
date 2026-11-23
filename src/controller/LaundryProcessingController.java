@@ -1,3 +1,4 @@
+
 package controller;
 
 import java.util.Collection;
@@ -38,7 +39,6 @@ public class LaundryProcessingController {
         while (running) {
 
             System.out.println("\n========== LAUNDRY PROCESSING ==========");
-
             System.out.println("1. View Laundry Orders");
             System.out.println("2. Update Laundry Status");
             System.out.println("0. Back to Main Menu");
@@ -88,21 +88,42 @@ public class LaundryProcessingController {
     // UPDATE LAUNDRY STATUS
     public void updateLaundryStatus() {
 
-        System.out.println("UPDATE LAUNDRY STATUS");
+        System.out.println("\n========== UPDATE LAUNDRY STATUS ==========");
 
-        System.out.print("\nEnter Order ID: ");
-        String orderId = scanner.nextLine();
+        Collection<LaundryOrder> orders = repository.findAll();
 
-        LaundryOrder order = repository.findById(orderId);
+        if (orders.isEmpty()) {
 
-        if (order == null) {
-
-            System.out.println("Order not found!");
+            System.out.println("\nNo laundry orders available!");
 
             System.out.print("\nPress ENTER to continue...");
             scanner.nextLine();
             return;
         }
+
+        // DISPLAY REGISTERED ORDERS
+        view.displayOrders(orders);
+
+        // ENTER ORDER ID
+        System.out.print("\nEnter Order ID: ");
+
+        String orderId = scanner.nextLine().trim();
+
+        LaundryOrder order = repository.findById(orderId);
+
+        if (order == null) {
+
+            System.out.println("\nOrder not found!");
+
+            System.out.print("\nPress ENTER to continue...");
+            scanner.nextLine();
+            return;
+        }
+
+        // DISPLAY ORDER INFORMATION
+        System.out.println("\n========== ORDER INFORMATION ==========");
+
+        System.out.println("Order ID: " + order.getOrderId());
 
         System.out.println("Customer: "
                 + order.getCustomer().getCustomerName());
@@ -110,6 +131,7 @@ public class LaundryProcessingController {
         System.out.println("Current Status: "
                 + order.getOrderStatus());
 
+        // DISPLAY STATUS OPTIONS
         view.displayStatusOptions();
 
         System.out.print("\nSelect New Status: ");
@@ -131,7 +153,7 @@ public class LaundryProcessingController {
 
         } catch (IllegalArgumentException e) {
 
-            System.out.println("Error: " + e.getMessage());
+            System.out.println("\nError: " + e.getMessage());
         }
 
         System.out.print("\nPress ENTER to continue...");

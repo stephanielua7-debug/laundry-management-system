@@ -1,4 +1,3 @@
-
 package controller;
 
 import java.util.ArrayList;
@@ -8,6 +7,7 @@ import java.util.List;
 import model.Customer;
 import model.LaundryOrder;
 import model.LaundryItem;
+import model.LaundryService;
 
 import service.LaundryReceivingService;
 import service.CustomerService;
@@ -20,6 +20,7 @@ public class LaundryReceivingController {
     private LaundryReceivingView view;
     private LaundryReceivingService service;
     private CustomerService customerService;
+    private LaundryServiceManager laundryServiceManager;
 
     private List<LaundryItem> pendingItems = new ArrayList<>();
 
@@ -32,6 +33,7 @@ public class LaundryReceivingController {
 
         this.service = service;
         this.customerService = customerService;
+        this.laundryServiceManager = laundryServiceManager;
         this.view = view;
     }
 
@@ -69,7 +71,7 @@ public class LaundryReceivingController {
 
         while (customer == null) {
 
-            String customerId = view.getInput("\nEnter Customer ID: ");
+            String customerId = view.getInput("\nEnter Customer ID: ").trim();
 
             customer = customerService.findCustomerById(customerId);
 
@@ -95,7 +97,7 @@ public class LaundryReceivingController {
 
             String itemName = view.getInput("Item Name: ");
 
-            if (itemName.isEmpty()) {
+            if (itemName.trim().isEmpty()) {
 
                 if (totalPieces == 0) {
                     System.out.println(
@@ -109,7 +111,8 @@ public class LaundryReceivingController {
             int quantity = view.getInteger("Quantity: ");
 
             if (quantity <= 0) {
-                System.out.println("Quantity must be greater than zero.");
+                System.out.println(
+                        "Quantity must be greater than zero.");
                 continue;
             }
 
@@ -120,39 +123,58 @@ public class LaundryReceivingController {
             System.out.println("Item added successfully!\n");
         }
 
-        // SELECT LAUNDRY SERVICE
-        view.displayServices();
+        // SELECT DYNAMIC LAUNDRY SERVICE
+        Collection<LaundryService> availableServices = laundryServiceManager.getAllServices();
 
-        int choice = view.selectService();
+        if (availableServices.isEmpty()) {
 
-        String serviceName;
-        double pricePerKg;
+            System.out.println("\nNo laundry services available!");
+            pendingItems.clear();
 
-        switch (choice) {
-
-            case 1:
-                serviceName = "Wash and Dry";
-                pricePerKg = 35;
-                break;
-
-            case 2:
-                serviceName = "Wash, Dry and Fold";
-                pricePerKg = 45;
-                break;
-
-            case 3:
-                serviceName = "Ironing";
-                pricePerKg = 25;
-                break;
-
-            default:
-                System.out.println("Invalid service selection.");
-                pendingItems.clear();
-                return;
+            view.getInput("\nPress ENTER to continue...");
+            return;
         }
+
+        List<LaundryService> serviceList = new ArrayList<>(availableServices);
+
+        System.out.println("\n========== AVAILABLE LAUNDRY SERVICES ==========");
+
+        for (int i = 0; i < serviceList.size(); i++) {
+
+            LaundryService laundryService = serviceList.get(i);
+
+            System.out.println(
+                    (i + 1) + ". "
+                            + laundryService.getServiceName()
+                            + " - PHP "
+                            + String.format("%.2f",
+                                    laundryService.getPricePerKg())
+                            + "/kg");
+        }
+
+        int choice = view.getInteger("\nSelect Service: ");
+
+        if (choice < 1 || choice > serviceList.size()) {
+
+            System.out.println("\nInvalid service selection!");
+            pendingItems.clear();
+            return;
+        }
+
+        LaundryService selectedService = serviceList.get(choice - 1);
+
+        String serviceName = selectedService.getServiceName();
+
+        double pricePerKg = selectedService.getPricePerKg();
 
         // ENTER WEIGHT
         double weight = view.getWeight();
+
+        if (weight <= 0) {
+            System.out.println("\nWeight must be greater than zero!");
+            pendingItems.clear();
+            return;
+        }
 
         // CREATE ORDER
         LaundryOrder order = service.createOrder(

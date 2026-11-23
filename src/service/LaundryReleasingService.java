@@ -1,45 +1,44 @@
+
 package service;
 
-// Imports the LaundryOrder class
 import model.LaundryOrder;
-
-// Imports the LaundryOrderRepository class
 import repository.LaundryOrderRepository;
+import util.ExceptionMessage;
 
 public class LaundryReleasingService {
 
-    // Creates a reference to LaundryOrderRepository
     private LaundryOrderRepository repository;
 
-    // Constructor
-    public LaundryReleasingService(LaundryOrderRepository repository) {
+    public LaundryReleasingService(
+            LaundryOrderRepository repository) {
+
         this.repository = repository;
     }
 
-    // Releases a laundry order using its Order ID
+    // RELEASE LAUNDRY ORDER
     public void releaseLaundry(String orderId) {
 
-        // Searches for the laundry order
-        LaundryOrder order = repository.findById(orderId);
+        LaundryOrder order = repository.findById(orderId.trim());
 
-        // Checks if the order exists
+        // Check if order exists
         if (order == null) {
-            throw new IllegalArgumentException("Order not found!");
+            throw new IllegalArgumentException(
+                    ExceptionMessage.ORDER_NOT_FOUND);
         }
 
-        // Checks if laundry is ready for pickup
+        // Check if laundry is ready
         if (!order.getOrderStatus().equals("Ready for Pickup")) {
             throw new IllegalArgumentException(
-                    "Laundry is not ready for pickup!");
+                    ExceptionMessage.NOT_READY_FOR_PICKUP);
         }
 
-        // Checks if payment is completed
+        // Check if payment is completed
         if (!order.getPaymentStatus().equals("Paid")) {
             throw new IllegalArgumentException(
-                    "Please complete payment first!");
+                    ExceptionMessage.PAYMENT_REQUIRED);
         }
 
-        // Updates laundry status to Claimed
+        // Update status
         order.setOrderStatus("Claimed");
 
         System.out.println("Laundry successfully released!");

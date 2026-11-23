@@ -1,33 +1,29 @@
-
 package repository;
 
-// Imports the LaundryOrder class
 import model.LaundryOrder;
-
-// Imports Java utility classes such as Map, LinkedHashMap, and Collection
 import java.util.*;
 
 public class LaundryOrderRepository {
 
-    // Creates a LinkedHashMap to store laundry orders.
-    // String represents the Order ID.
-    // LaundryOrder represents the order information.
     private Map<String, LaundryOrder> orders = new LinkedHashMap<>();
 
-    // Saves a new laundry order or updates an existing one.
+    // Save laundry order
     public void save(LaundryOrder order) {
-        orders.put(order.getOrderId(), order);
+        orders.put(order.getOrderId().trim(), order);
     }
 
-    // Searches for a laundry order using its Order ID.
-    // Returns the order if found; otherwise, returns null.
+    // Find laundry order using Order ID
     public LaundryOrder findById(String orderId) {
-        return orders.get(orderId);
+
+        if (orderId == null) {
+            return null;
+        }
+
+        return orders.get(orderId.trim());
     }
 
-    // Retrieves and returns all saved laundry orders.
+    // Get all laundry orders
     public Collection<LaundryOrder> findAll() {
         return orders.values();
     }
-
 }

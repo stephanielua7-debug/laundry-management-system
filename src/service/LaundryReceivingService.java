@@ -1,4 +1,3 @@
-
 package service;
 
 import model.Customer;
@@ -11,7 +10,7 @@ import java.util.Collection;
 
 public class LaundryReceivingService {
 
-    private int orderCounter = 1;
+    private int orderCounter = 1001;
 
     private CustomerService customerService;
     private LaundryOrderRepository orderRepository;
@@ -41,7 +40,7 @@ public class LaundryReceivingService {
             String serviceName,
             double pricePerKg) {
 
-        String orderId = " " + orderCounter++;
+        String orderId = "ORD-" + orderCounter++;
 
         return new LaundryOrder(
                 orderId,

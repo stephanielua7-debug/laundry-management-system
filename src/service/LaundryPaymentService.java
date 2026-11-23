@@ -4,6 +4,7 @@ package service;
 import model.*;
 import repository.*;
 import util.IdGenerator;
+import util.ExceptionMessage;
 
 import java.util.Collection;
 
@@ -20,30 +21,34 @@ public class LaundryPaymentService {
         this.paymentRepository = paymentRepository;
     }
 
+    // PROCESS LAUNDRY PAYMENT
     public LaundryPayment payLaundry(
             String orderId, String paymentMethod) {
 
-        LaundryOrder order = orderRepository.findById(orderId);
+        LaundryOrder order = orderRepository.findById(orderId.trim());
 
         if (order == null) {
-            throw new IllegalArgumentException("Order not found!");
+            throw new IllegalArgumentException(
+                    ExceptionMessage.ORDER_NOT_FOUND);
         }
 
         if ("Paid".equals(order.getPaymentStatus())) {
             throw new IllegalArgumentException(
-                    "This order is already paid!");
+                    ExceptionMessage.ALREADY_PAID);
         }
 
-        if (paymentMethod == null || paymentMethod.trim().isEmpty()) {
+        if (paymentMethod == null
+                || paymentMethod.trim().isEmpty()) {
+
             throw new IllegalArgumentException(
-                    "Payment method is required!");
+                    ExceptionMessage.PAYMENT_METHOD_REQUIRED);
         }
 
         LaundryPayment payment = new LaundryPayment(
                 IdGenerator.generatePaymentId(),
-                orderId,
+                orderId.trim(),
                 order.getTotalAmount(),
-                paymentMethod);
+                paymentMethod.trim());
 
         paymentRepository.save(payment);
 
@@ -52,6 +57,7 @@ public class LaundryPaymentService {
         return payment;
     }
 
+    // GET ALL PAYMENTS
     public Collection<LaundryPayment> getAllPayments() {
         return paymentRepository.findAll();
     }
