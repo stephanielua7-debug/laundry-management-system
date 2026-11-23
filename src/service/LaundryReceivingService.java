@@ -11,7 +11,7 @@ import java.util.Collection;
 
 public class LaundryReceivingService {
 
-    private int orderCounter = 1001;
+    private int orderCounter = 1;
 
     private CustomerService customerService;
     private LaundryOrderRepository orderRepository;
@@ -41,7 +41,7 @@ public class LaundryReceivingService {
             String serviceName,
             double pricePerKg) {
 
-        String orderId = "ORD-" + orderCounter++;
+        String orderId = " " + orderCounter++;
 
         return new LaundryOrder(
                 orderId,

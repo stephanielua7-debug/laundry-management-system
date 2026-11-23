@@ -9,7 +9,7 @@ import java.util.Collection;
 public class CustomerService {
 
     private CustomerRepository repository;
-    private int customerCounter = 1;
+    private int customerCounter = 1001;
 
     public CustomerService(CustomerRepository repository) {
         this.repository = repository;
@@ -18,7 +18,7 @@ public class CustomerService {
     // ADD CUSTOMER
     public Customer addCustomer(String name, String phone) {
 
-        String customerId = "  " + customerCounter++;
+        String customerId = "CUS-" + customerCounter++;
 
         Customer customer = new Customer(
                 customerId,
