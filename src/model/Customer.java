@@ -1,43 +1,32 @@
 
 package model;
 
-public class Customer {
+public class Customer extends Person {
 
-    private String customerId;
-    private String customerName;
-    private String contactNumber;
+    private String email;
 
     public Customer(String customerId, String customerName,
-            String contactNumber) {
+            String contactNumber, String email) {
 
-        this.customerId = customerId;
-        this.customerName = customerName;
-        this.contactNumber = contactNumber;
+        super(customerId, customerName, contactNumber);
+        this.email = email;
     }
 
-    public String getCustomerId() {
-        return customerId;
+    public String getEmail() {
+        return email;
     }
 
-    public String getCustomerName() {
-        return customerName;
-    }
-
-    public String getContactNumber() {
-        return contactNumber;
-    }
-
-    public void setCustomerName(String customerName) {
-        this.customerName = customerName;
-    }
-
-    public void setContactNumber(String contactNumber) {
-        this.contactNumber = contactNumber;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     @Override
     public String toString() {
-        return customerId + " - " + customerName
-                + " - " + contactNumber;
+        return String.format(
+                "%-12s | %-20s | %-13s | %s",
+                getCustomerId(),
+                getCustomerName(),
+                getContactNumber(),
+                email);
     }
 }

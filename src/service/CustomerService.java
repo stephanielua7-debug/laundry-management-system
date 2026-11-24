@@ -1,41 +1,65 @@
+
 package service;
 
 import model.Customer;
 import repository.CustomerRepository;
 
-import java.util.Collection;
+import java.util.List;
+import java.util.Optional;
 
 public class CustomerService {
 
-    private CustomerRepository repository;
-    private int customerCounter = 1001;
+    private final CustomerRepository repository;
 
     public CustomerService(CustomerRepository repository) {
         this.repository = repository;
     }
 
-    // ADD CUSTOMER
-    public Customer addCustomer(String name, String phone) {
-
-        String customerId = "CUS-" + customerCounter++;
+    // REGISTER CUSTOMER
+    public Customer register(String name, String phone, String email) {
 
         Customer customer = new Customer(
-                customerId,
+                repository.nextId(),
                 name,
-                phone);
+                phone,
+                email);
 
-        repository.save(customer);
+        repository.add(customer);
 
         return customer;
     }
 
+    // FIND CUSTOMER BY ID
+    public Optional<Customer> find(String customerId) {
+        return repository.findById(customerId);
+    }
+
     // GET ALL CUSTOMERS
-    public Collection<Customer> getAllCustomers() {
+    public List<Customer> listAll() {
         return repository.findAll();
     }
 
-    // FIND CUSTOMER BY ID
-    public Customer findCustomerById(String customerId) {
-        return repository.findById(customerId);
+    // UPDATE CUSTOMER
+    public boolean update(String customerId, String name,
+            String phone, String email) {
+
+        Optional<Customer> found = repository.findById(customerId);
+
+        if (found.isEmpty()) {
+            return false;
+        }
+
+        Customer customer = found.get();
+
+        customer.setCustomerName(name);
+        customer.setContactNumber(phone);
+        customer.setEmail(email);
+
+        return true;
+    }
+
+    // DELETE CUSTOMER
+    public boolean delete(String customerId) {
+        return repository.remove(customerId);
     }
 }
