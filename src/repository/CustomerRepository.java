@@ -1,25 +1,31 @@
 
-package repository;
+package view;
 
 import model.Customer;
-import java.util.*;
+import java.util.Collection;
 
-public class CustomerRepository {
+import util.ConsoleFormatter;
 
-    private Map<String, Customer> customers = new LinkedHashMap<>();
+public class CustomerView {
 
-    // Save customer
-    public void save(Customer customer) {
-        customers.put(customer.getCustomerId(), customer);
-    }
+    // Displays all registered customers with numbering.
+    public void displayCustomers(Collection<Customer> customers) {
 
-    // Find customer by ID
-    public Customer findById(String customerId) {
-        return customers.get(customerId);
-    }
+        ConsoleFormatter.printHeader("REGISTERED CUSTOMERS");
 
-    // Get all customers
-    public Collection<Customer> findAll() {
-        return customers.values();
+        if (customers.isEmpty()) {
+            System.out.println("No registered customers.");
+            return;
+        }
+
+        int number = 1;
+
+        for (Customer customer : customers) {
+
+            System.out.println(number + ". " + customer);
+            number++;
+        }
+
+        System.out.println("========================================");
     }
 }

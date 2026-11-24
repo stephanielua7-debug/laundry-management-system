@@ -1,4 +1,3 @@
-
 package view;
 
 import java.util.Scanner;
@@ -83,11 +82,9 @@ public class LaundryReceivingView {
 
         System.out.println("Order ID: " + order.getOrderId());
 
-        System.out.println("Customer: "
-                + order.getCustomer().getCustomerName());
+        System.out.println("Customer: " + order.getCustomer().getCustomerName());
 
-        System.out.println("Contact: "
-                + order.getCustomer().getContactNumber());
+        System.out.println("Contact: " + order.getCustomer().getContactNumber());
 
         System.out.println("\nLaundry Items:");
 

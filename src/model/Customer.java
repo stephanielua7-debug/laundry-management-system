@@ -7,9 +7,7 @@ public class Customer {
     private String customerName;
     private String contactNumber;
 
-    public Customer(
-            String customerId,
-            String customerName,
+    public Customer(String customerId, String customerName,
             String contactNumber) {
 
         this.customerId = customerId;
@@ -39,7 +37,7 @@ public class Customer {
 
     @Override
     public String toString() {
-        return "Customer ID:" + customerId + "\nCustomerName: " + customerName
-                + "\nContact Number: " + contactNumber;
+        return customerId + " - " + customerName
+                + " - " + contactNumber;
     }
 }

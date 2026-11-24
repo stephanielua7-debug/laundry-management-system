@@ -3,6 +3,7 @@ package controller;
 
 import java.util.Collection;
 import java.util.Scanner;
+import util.ConsoleFormatter;
 
 import model.LaundryOrder;
 
@@ -38,7 +39,7 @@ public class LaundryProcessingController {
 
         while (running) {
 
-            System.out.println("\n========== LAUNDRY PROCESSING ==========");
+            System.out.println(" LAUNDRY PROCESSING ");
             System.out.println("1. View Laundry Orders");
             System.out.println("2. Update Laundry Status");
             System.out.println("0. Back to Main Menu");
@@ -64,12 +65,12 @@ public class LaundryProcessingController {
                         break;
 
                     default:
-                        System.out.println("\nInvalid choice!");
+                        System.out.println("Invalid choice!");
                         break;
                 }
 
             } catch (NumberFormatException e) {
-                System.out.println("\nPlease enter a valid number!");
+                System.out.println("Please enter a valid number!");
             }
         }
     }

@@ -23,7 +23,7 @@ public class AdminLoginView {
     public void displayLoginHeader() {
         System.out.println("\n=================================");
         System.out.println("     LAUNDRY MANAGEMENT SYSTEM");
-        System.out.println("             ADMIN LOGIN");
+        System.out.println("            ADMIN LOGIN      ");
         System.out.println("=================================");
     }
 

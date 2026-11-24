@@ -1,32 +1,31 @@
+
 package view;
 
 import model.Customer;
 import java.util.Collection;
 
+import util.ConsoleFormatter;
+
 public class CustomerView {
 
-    // Displays the list of customers.
+    // Displays all registered customers with numbering.
     public void displayCustomers(Collection<Customer> customers) {
 
-        System.out.println("\n========== CUSTOMER LIST ==========");
+        ConsoleFormatter.printHeader("REGISTERED CUSTOMERS");
 
-        // Checks if there are no customers to display.
         if (customers.isEmpty()) {
-            System.out.println("No customers found.");
+            System.out.println("No registered customers.");
             return;
         }
 
-        // Loops through the collection and displays each customer.
+        int number = 1;
+
         for (Customer customer : customers) {
-            System.out.println(customer);
-            System.out.println(); // Adds spacing between customers
+
+            System.out.println(number + ". " + customer);
+            number++;
         }
 
-        System.out.println("===================================");
-    }
-
-    // Displays messages to the user.
-    public void displayMessage(String message) {
-        System.out.println(message);
+        System.out.println("========================================");
     }
 }
