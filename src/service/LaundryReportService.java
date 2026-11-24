@@ -1,3 +1,4 @@
+
 package service;
 
 // Imports all classes from the model package
@@ -12,21 +13,20 @@ import java.util.Collection;
 public class LaundryReportService {
 
     // Repository for accessing laundry orders
-    private LaundryOrderRepository orderRepository;
+    private final LaundryOrderRepository orderRepository;
 
     // Repository for accessing customer records
-    private CustomerRepository customerRepository;
+    private final CustomerRepository customerRepository;
 
     // Repository for accessing laundry service records
-    private LaundryServiceRepository serviceRepository;
+    private final LaundryServiceRepository serviceRepository;
 
-    // Constructor that receives the required repositories
+    // Constructor
     public LaundryReportService(
             LaundryOrderRepository orderRepository,
             CustomerRepository customerRepository,
             LaundryServiceRepository serviceRepository) {
 
-        // Assigns the received repositories to the class variables
         this.orderRepository = orderRepository;
         this.customerRepository = customerRepository;
         this.serviceRepository = serviceRepository;
@@ -37,39 +37,33 @@ public class LaundryReportService {
         return orderRepository.findAll();
     }
 
-    // Retrieves customer information using the Customer ID
+    // Retrieves customer information using Customer ID
     public Customer getCustomer(String customerId) {
-        return customerRepository.findById(customerId);
+        return customerRepository.findById(customerId).orElse(null);
     }
 
-    // Retrieves laundry service information using the Service ID
+    // Retrieves laundry service information using Service ID
     public LaundryService getService(String serviceId) {
         return serviceRepository.findById(serviceId);
     }
 
-    // Counts the total number of laundry orders
+    // Counts total laundry orders
     public int getTotalOrders() {
         return orderRepository.findAll().size();
     }
 
-    // Calculates the total amount from all paid orders
+    // Calculates total amount from paid orders
     public double getTotalPaid() {
 
-        // Initializes the total amount to zero
         double total = 0;
 
-        // Loops through all saved laundry orders
         for (LaundryOrder order : orderRepository.findAll()) {
 
-            // Checks if the payment status is Paid
             if (order.getPaymentStatus().equals("Paid")) {
-
-                // Adds the order amount to the total
                 total += order.getTotalAmount();
             }
         }
 
-        // Returns the total amount collected from paid orders
         return total;
     }
 }

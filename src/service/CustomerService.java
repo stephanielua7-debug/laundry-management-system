@@ -6,6 +6,7 @@ import repository.CustomerRepository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Collection;
 
 public class CustomerService {
 
@@ -62,4 +63,16 @@ public class CustomerService {
     public boolean delete(String customerId) {
         return repository.remove(customerId);
     }
+
+    // BACKWARD COMPATIBILITY
+    // For existing Laundry modules
+
+    public Collection<Customer> getAllCustomers() {
+        return repository.findAll();
+    }
+
+    public Customer findCustomerById(String customerId) {
+        return repository.findById(customerId).orElse(null);
+    }
+
 }
