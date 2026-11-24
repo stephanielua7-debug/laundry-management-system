@@ -3,12 +3,11 @@ package view;
 
 import model.Customer;
 import java.util.Collection;
-
 import util.ConsoleFormatter;
 
 public class CustomerView {
 
-    // Displays all registered customers with numbering.
+    // Displays registered customers with separators.
     public void displayCustomers(Collection<Customer> customers) {
 
         ConsoleFormatter.printHeader("REGISTERED CUSTOMERS");
@@ -23,9 +22,11 @@ public class CustomerView {
         for (Customer customer : customers) {
 
             System.out.println(number + ". " + customer);
+            System.out.println("------------------------------------------");
+
             number++;
         }
 
-        System.out.println("========================================");
+        System.out.println("==========================================");
     }
 }
